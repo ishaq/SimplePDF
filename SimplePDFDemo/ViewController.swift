@@ -54,6 +54,28 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
     }
     
     private func addDocumentCover(pdf: SimplePDF) {
+        // Cover Page can be designed in a nib (.xib) and added to pdf via `pdf.addView()` call.
+        //
+        // Here's how you can design a cover page with using a UIView (sample applies to any other view that you want to add to pdf)
+        // 1. Create a nib with the same dimensions as PDF page (e.g. A4 page is 595x842)
+        // 2. All the labels in the view should have their class set to `SimplePDFLabel` (or a subclass of it)
+        // 3. Load the view from the nib and add it to pdf
+        // ```
+        // // ...
+        // let coverPage = NSBundle.mainBundle().loadNibNamed("PDFCoverPage", owner: self, options: nil).first as PDFCoverPage
+        // pdf.addView(coverPage)
+        // ```
+        //
+        // NOTE:
+        //      Please note that if you use the above method to render a view to PDF, AutoLayout will *not* be run on it, If your view doesn't rely on
+        // autolayout e.g. say it's a simple table, you don't need to worry about anything.
+        //
+        // However, if your view uses AutoLayout to correctly position elements, you *have to* add it to the active view hierarchy. You can add to the
+        // view hierarchy off-screen, then call `pdf.addView()` to render it to PDF. The catch here is that now the view would render as *bitmap*. This means
+        // any labels will not be selectable as text and they would lose quality if you zoom in (because they are bitmaps).
+        //
+        
+        
         // NOTE: we manually format document title and use `addAttributedString` instead of, say, `addH1` because we don't want it in the TOC
         let documentTitle = NSMutableAttributedString(string: "Demo PDF")
         let titleFont = UIFont.boldSystemFontOfSize(48)

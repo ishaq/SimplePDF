@@ -889,11 +889,12 @@ public class SimplePDF {
         private func addAttributedString(attrString: NSAttributedString, allowSplitting:Bool = true, backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
             return addAttributedStringsToColumns([availablePageRect.size.width], strings: [attrString], horizontalPadding: 0.0, allowSplitting: allowSplitting, backgroundColor: backgroundBoxColor, calculationOnly: calculationOnly)
         }
-        
-        // NSRange works like this
-        // location is startPageOffset
-        // length is how many pages are added, so (length + location) = last page index
+
         private func addView(view: UIView, calculationOnly: Bool = false) -> NSRange {
+            // Here's how I work with NSRange in these functions
+            // location is startPageOffset
+            // length is how many pages are added, so (length + location) = last page index
+            
             var range = NSMakeRange(0, 0) // a view is always
             if(currentLocation.y > 0) {
                 range.location = 1
@@ -1354,6 +1355,28 @@ public class SimplePDF {
     public func addAttributedString(attrString: NSAttributedString, allowSplitting:Bool = true, backgroundBoxColor: UIColor? = nil) -> NSRange {
         return addAttributedStringsToColumns([pdfWriter.availablePageRect.size.width], strings: [attrString], horizontalPadding: 0.0, allowSplitting: allowSplitting, backgroundColor: backgroundBoxColor)
     }
+    
+    // This function can be used to render a view to a PDF page (mostly useful to design cover pages). A view is always added to its own page. It starts 
+    // a new page if required, and any contented added after it appears on the next page.
+    //
+    // Here's how you can design a cover page with using a UIView (sample applies to any other view that you want to add to pdf)
+    // 1. Create a nib with the same dimensions as PDF page (e.g. A4 page is 595x842)
+    // 2. All the labels in the view should have their class set to `SimplePDFLabel` (or a subclass of it)
+    // 3. Load the view from the nib and add it to pdf
+    // ```
+    // // ...
+    // let coverPage = NSBundle.mainBundle().loadNibNamed("PDFCoverPage", owner: self, options: nil).first as PDFCoverPage
+    // pdf.addView(coverPage)
+    // ```
+    //
+    // NOTE: 
+    //      Please note that if you use the above method to render a view to PDF, AutoLayout will *not* be run on it, If your view doesn't rely on 
+    // autolayout e.g. say it's a table, may be an invoice?, you don't need to worry about anything.
+    //
+    // However, if your view uses AutoLayout to correctly position elements, you *have to* add it to the active view hierarchy. You can add to the
+    // view hierarchy off-screen, then call `pdf.addView()` to render it to PDF. The catch here is that now the view would render as *bitmap*. This means
+    // any labels will not be selectable as text and they would lose quality if you zoom in (because they are bitmaps).
+    //
     
     public func addView(view: UIView) -> NSRange {
         let range = pdfWriter.addView(view, calculationOnly: true)
