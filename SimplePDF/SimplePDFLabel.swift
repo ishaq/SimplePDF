@@ -6,7 +6,7 @@
 
 import UIKit
 
-class PDFLabel: UILabel {
+class SimplePDFLabel: UILabel {
 
     /*
     // Only override drawRect: if you perform custom drawing.

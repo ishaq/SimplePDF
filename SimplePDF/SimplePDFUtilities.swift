@@ -43,22 +43,22 @@ class SimplePDFUtilities {
         return path
     }
     
-    class func renameFilePathToPreventNameCollissions(var path: String) -> String {
+    class func renameFilePathToPreventNameCollissions(path: String) -> String {
         let fileManager = NSFileManager()
         
         // append a postfix if file name is already taken
         var postfix = 0
-        while(fileManager.fileExistsAtPath(path)) {
+        var newPath = path
+        while(fileManager.fileExistsAtPath(newPath)) {
             postfix++
             
             let pathExtension = path.pathExtension
-            path = path.stringByDeletingPathExtension
-            path = path.stringByAppendingString(" \(postfix)")
-            path = path.stringByAppendingPathExtension(pathExtension)!
+            newPath = path.stringByDeletingPathExtension
+            newPath = newPath.stringByAppendingString(" \(postfix)")
+            newPath = newPath.stringByAppendingPathExtension(pathExtension)!
         }
         
-        return path
-        
+        return newPath
     }
     
     class func getImageProperties(imagePath: String) -> NSDictionary {

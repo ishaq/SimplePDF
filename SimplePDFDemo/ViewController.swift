@@ -69,7 +69,7 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
     }
     
     private func addDocumentContent(pdf: SimplePDF) {
-        pdf.addH1("Lorem ipsum dolor sit amet")
+        pdf.addH2("Level 2 Heading")
         pdf.addBodyText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec enim est. Phasellus eu lacus ac ex facilisis porta eu ac nisi. Ut ullamcorper id justo vel lobortis. Cras sed egestas elit, malesuada maximus metus. Mauris faucibus, metus et interdum feugiat, mauris felis varius lacus, porta semper ipsum eros eget massa. Fusce et diam ac lacus bibendum rutrum ac nec neque. Proin rutrum nisl nec vestibulum commodo. Donec eu dolor quis sapien lobortis elementum. Ut tincidunt justo at mauris lobortis placerat. Nam tristique ornare luctus. Donec eu pretium sapien. Pellentesque venenatis eros nulla, eget tincidunt mauris tempor eget. In egestas orci a sem congue semper.")
         
         let imagePath = NSBundle.mainBundle().pathForResource("Demo", ofType: "png")!
@@ -77,6 +77,21 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         pdf.addImages([imagePath], imageCaptions: [imageCaption], imagesPerRow: 1)
         
         pdf.addBodyText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec enim est. Phasellus eu lacus ac ex facilisis porta eu ac nisi. Ut ullamcorper id justo vel lobortis. Cras sed egestas elit, malesuada maximus metus. Mauris faucibus, metus et interdum feugiat, mauris felis varius lacus, porta semper ipsum eros eget massa. Fusce et diam ac lacus bibendum rutrum ac nec neque. Proin rutrum nisl nec vestibulum commodo. Donec eu dolor quis sapien lobortis elementum. Ut tincidunt justo at mauris lobortis placerat. Nam tristique ornare luctus. Donec eu pretium sapien. Pellentesque venenatis eros nulla, eget tincidunt mauris tempor eget. In egestas orci a sem congue semper.")
+        
+        for i in 0..<2 {
+            pdf.addH3("Level 3 Heading \(i)")
+            pdf.addBodyText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec enim est. Phasellus eu lacus ac ex facilisis porta eu ac nisi. Ut ullamcorper id justo vel lobortis. Cras sed egestas elit, malesuada maximus metus. Mauris faucibus, metus et interdum feugiat, mauris felis varius lacus, porta semper ipsum eros eget massa. Fusce et diam ac lacus bibendum rutrum ac nec neque. Proin rutrum nisl nec vestibulum commodo. Donec eu dolor quis sapien lobortis elementum. Ut tincidunt justo at mauris lobortis placerat. Nam tristique ornare luctus. Donec eu pretium sapien. Pellentesque venenatis eros nulla, eget tincidunt mauris tempor eget. In egestas orci a sem congue semper.")
+            for j in 0..<3 {
+                pdf.addH4("Level 4 Heading \(j)")
+                pdf.addBodyText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec enim est. Phasellus eu lacus ac ex facilisis porta eu ac nisi. Ut ullamcorper id justo vel lobortis. Cras sed egestas elit, malesuada maximus metus. Mauris faucibus, metus et interdum feugiat, mauris felis varius lacus, porta semper ipsum eros eget massa. Fusce et diam ac lacus bibendum rutrum ac nec neque. Proin rutrum nisl nec vestibulum commodo. Donec eu dolor quis sapien lobortis elementum. Ut tincidunt justo at mauris lobortis placerat. Nam tristique ornare luctus. Donec eu pretium sapien. Pellentesque venenatis eros nulla, eget tincidunt mauris tempor eget. In egestas orci a sem congue semper.")
+                for k in 0..<3 {
+                    pdf.addH5("Level 5 Heading \(k)")
+                    pdf.addBodyText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec enim est. Phasellus eu lacus ac ex facilisis porta eu ac nisi. Ut ullamcorper id justo vel lobortis. Cras sed egestas elit, malesuada maximus metus. Mauris faucibus, metus et interdum feugiat, mauris felis varius lacus, porta semper ipsum eros eget massa. Fusce et diam ac lacus bibendum rutrum ac nec neque. Proin rutrum nisl nec vestibulum commodo. Donec eu dolor quis sapien lobortis elementum. Ut tincidunt justo at mauris lobortis placerat. Nam tristique ornare luctus. Donec eu pretium sapien. Pellentesque venenatis eros nulla, eget tincidunt mauris tempor eget. In egestas orci a sem congue semper.")
+                    
+                    pdf.addImages([imagePath, imagePath, imagePath, imagePath], imageCaptions: [imageCaption, imageCaption, imageCaption, imageCaption], imagesPerRow: 3, spacing: 10, padding: 5)
+                }
+            }
+        }
     }
     
     private func addHeadersFooters(pdf: SimplePDF) {

@@ -13,9 +13,9 @@
 		57472A391AC8567700FED8E6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57472A381AC8567700FED8E6 /* Images.xcassets */; };
 		57472A3C1AC8567700FED8E6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57472A3A1AC8567700FED8E6 /* LaunchScreen.xib */; };
 		57472A481AC8567800FED8E6 /* SimplePDFDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57472A471AC8567800FED8E6 /* SimplePDFDemoTests.swift */; };
-		57472A551AC8573500FED8E6 /* PDFLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57472A521AC8573500FED8E6 /* PDFLabel.swift */; };
+		57472A551AC8573500FED8E6 /* SimplePDFLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57472A521AC8573500FED8E6 /* SimplePDFLabel.swift */; };
 		57472A561AC8573500FED8E6 /* SimplePDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57472A531AC8573500FED8E6 /* SimplePDF.swift */; };
-		57472A571AC8573500FED8E6 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57472A541AC8573500FED8E6 /* Utilities.swift */; };
+		57472A571AC8573500FED8E6 /* SimplePDFUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57472A541AC8573500FED8E6 /* SimplePDFUtilities.swift */; };
 		578689E71AC87FA400BA6821 /* Demo.png in Resources */ = {isa = PBXBuildFile; fileRef = 578689E61AC87FA400BA6821 /* Demo.png */; };
 /* End PBXBuildFile section */
 
@@ -40,9 +40,9 @@
 		57472A411AC8567800FED8E6 /* SimplePDFDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimplePDFDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57472A461AC8567800FED8E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57472A471AC8567800FED8E6 /* SimplePDFDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplePDFDemoTests.swift; sourceTree = "<group>"; };
-		57472A521AC8573500FED8E6 /* PDFLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFLabel.swift; sourceTree = "<group>"; };
+		57472A521AC8573500FED8E6 /* SimplePDFLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePDFLabel.swift; sourceTree = "<group>"; };
 		57472A531AC8573500FED8E6 /* SimplePDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePDF.swift; sourceTree = "<group>"; };
-		57472A541AC8573500FED8E6 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		57472A541AC8573500FED8E6 /* SimplePDFUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePDFUtilities.swift; sourceTree = "<group>"; };
 		578689E61AC87FA400BA6821 /* Demo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Demo.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,9 +125,9 @@
 		57472A511AC8573500FED8E6 /* SimplePDF */ = {
 			isa = PBXGroup;
 			children = (
-				57472A521AC8573500FED8E6 /* PDFLabel.swift */,
+				57472A521AC8573500FED8E6 /* SimplePDFLabel.swift */,
 				57472A531AC8573500FED8E6 /* SimplePDF.swift */,
-				57472A541AC8573500FED8E6 /* Utilities.swift */,
+				57472A541AC8573500FED8E6 /* SimplePDFUtilities.swift */,
 			);
 			path = SimplePDF;
 			sourceTree = "<group>";
@@ -233,10 +233,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57472A551AC8573500FED8E6 /* PDFLabel.swift in Sources */,
+				57472A551AC8573500FED8E6 /* SimplePDFLabel.swift in Sources */,
 				57472A341AC8567700FED8E6 /* ViewController.swift in Sources */,
 				57472A561AC8573500FED8E6 /* SimplePDF.swift in Sources */,
-				57472A571AC8573500FED8E6 /* Utilities.swift in Sources */,
+				57472A571AC8573500FED8E6 /* SimplePDFUtilities.swift in Sources */,
 				57472A321AC8567700FED8E6 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
