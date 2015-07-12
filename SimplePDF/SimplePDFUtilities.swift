@@ -17,8 +17,8 @@ class SimplePDFUtilities {
         else {
             dictionary = NSBundle.mainBundle().infoDictionary!
         }
-        let build = dictionary["CFBundleVersion"] as NSString
-        let shortVersionString = dictionary["CFBundleShortVersionString"] as NSString
+        let build = dictionary["CFBundleVersion"] as! NSString
+        let shortVersionString = dictionary["CFBundleShortVersionString"] as! NSString
         
         return "(\(shortVersionString) Build: \(build))"
     }
@@ -31,9 +31,9 @@ class SimplePDFUtilities {
         else {
             dictionary = NSBundle.mainBundle().infoDictionary!
         }
-        let name = dictionary["CFBundleName"] as NSString
+        let name = dictionary["CFBundleName"] as! NSString
         
-        return name
+        return name as String
     }
     
     class func pathForTmpFile(fileName: String) -> String {
@@ -77,7 +77,7 @@ class SimplePDFUtilities {
             let remainder = mutableValue % base
             mutableValue = mutableValue - remainder
             mutableValue = mutableValue / base
-            let unicodeChar = UnicodeScalar(remainder + unicodeLetterA.value)
+            let unicodeChar = UnicodeScalar(remainder + Int(unicodeLetterA.value))
             result = String(unicodeChar) + result
         
         } while mutableValue > 0
