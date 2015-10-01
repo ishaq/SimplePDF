@@ -17,7 +17,7 @@ public class SimplePDF {
     // MARK: - Document Structure
     private class DocumentStructure {
         // MARK: - FunctionCall (sort of a "Command" pattern)
-        private enum FunctionCall : Printable {
+        private enum FunctionCall : CustomStringConvertible {
             case addH1(string: String, backgroundBoxColor: UIColor?)
             case addH2(string: String, backgroundBoxColor: UIColor?)
             case addH3(string: String, backgroundBoxColor: UIColor?)
@@ -35,29 +35,29 @@ public class SimplePDF {
             var description: String {
                 get {
                     switch(self) {
-                    case .addH1(let string, let backgroundBoxColor):
+                    case .addH1(let string, _):
                         return "addH1 (\(string))"
-                    case .addH2(let string, let backgroundBoxColor):
+                    case .addH2(let string, _):
                         return "addH2 (\(string))"
-                    case .addH3(let string, let backgroundBoxColor):
+                    case .addH3(let string, _):
                         return "addH3 (\(string))"
-                    case .addH4(let string, let backgroundBoxColor):
+                    case .addH4(let string, _):
                         return "addH4 (\(string))"
-                    case .addH5(let string, let backgroundBoxColor):
+                    case .addH5(let string, _):
                         return "addH5 (\(string))"
-                    case .addH6(let string, let backgroundBoxColor):
+                    case .addH6(let string, _):
                         return "addH6 (\(string))"
-                    case .addBodyText(let string, let backgroundBoxColor):
-                        return "addBodyText (\(string.substringToIndex(advance(string.startIndex, 25))))"
+                    case .addBodyText(let string, _):
+                        return "addBodyText (\(string.substringToIndex(string.startIndex.advancedBy(25))))"
                     case .startNewPage:
                         return "startNewPage"
-                    case .addImages(let imagePaths, let imageCaptions, let imagesPerRow, let spacing, let padding):
+                    case .addImages:
                         return "addImages"
-                    case .addImagesRow(let imagePaths, let imageCaptions, let columnWidths, let spacing, let padding, let captionBackgroundColor, let imageBackgroundColor):
+                    case .addImagesRow:
                         return "addImagesRow"
-                    case .addAttributedStringsToColumns(let columnWidths, let strings, let horizontalPadding, let allowSplitting, let backgroundColor):
+                    case .addAttributedStringsToColumns:
                         return "addAttributedStringsToColumns"
-                    case .addView(let view):
+                    case .addView:
                         return "addView"
                     }
                     
@@ -82,7 +82,7 @@ public class SimplePDF {
                 case .addBodyText(let string, let backgroundBoxColor):
                     pageRange = pdf.addBodyText(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
                 case .startNewPage:
-                    pageRange = pdf.startNewPage(calculationOnly: calculationOnly)
+                    pageRange = pdf.startNewPage(calculationOnly)
                 case .addImages(let imagePaths, let imageCaptions, let imagesPerRow, let spacing, let padding):
                     pageRange = pdf.addImages(imagePaths, imageCaptions: imageCaptions, imagesPerRow: imagesPerRow, spacing: spacing, padding: padding, calculationOnly: calculationOnly)
                 case .addImagesRow(let imagePaths, let imageCaptions, let columnWidths, let spacing, let padding, let captionBackgroundColor, let imageBackgroundColor):
@@ -98,17 +98,17 @@ public class SimplePDF {
             
             func getTableOfContentsInfo() -> (TextStyle, String?) {
                 switch(self) {
-                case .addH1(let string, let backgroundBoxColor):
+                case .addH1(let string, _):
                     return (.H1, string)
-                case .addH2(let string, let backgroundBoxColor):
+                case .addH2(let string, _):
                     return (.H2, string)
-                case .addH3(let string, let backgroundBoxColor):
+                case .addH3(let string, _):
                     return (.H3, string)
-                case .addH4(let string, let backgroundBoxColor):
+                case .addH4(let string, _):
                     return (.H4, string)
-                case .addH5(let string, let backgroundBoxColor):
+                case .addH5(let string, _):
                     return (.H5, string)
-                case .addH6(let string, let backgroundBoxColor):
+                case .addH6(let string, _):
                     return (.H6, string)
                 default:
                     return (.BodyText, nil)
@@ -214,7 +214,7 @@ public class SimplePDF {
     // MARK: - Text Formatter
     public class DefaultTextFormatter {
         func attributedStringForStyle(string: String, style: TextStyle) -> NSAttributedString {
-            var attrString = NSMutableAttributedString(string: string)
+            let attrString = NSMutableAttributedString(string: string)
             
             let paragraphStyle = NSMutableParagraphStyle()
             switch(style) {
@@ -349,9 +349,9 @@ public class SimplePDF {
             
             for var i = 0; i < self.headerFooterTexts.count; i++ {
                 var text = self.headerFooterTexts[i]
-                var textString = NSMutableAttributedString(attributedString: text.attributedString)
-                textString.mutableString.replaceOccurrencesOfString(kPageNumberPlaceholder, withString: "\(currentPage + 1)", options: nil, range: NSMakeRange(0, textString.length))
-                textString.mutableString.replaceOccurrencesOfString(kPagesCountPlaceholder, withString: "\(pagesCount)", options: nil, range: NSMakeRange(0, textString.length))
+                let textString = NSMutableAttributedString(attributedString: text.attributedString)
+                textString.mutableString.replaceOccurrencesOfString(kPageNumberPlaceholder, withString: "\(currentPage + 1)", options: [], range: NSMakeRange(0, textString.length))
+                textString.mutableString.replaceOccurrencesOfString(kPagesCountPlaceholder, withString: "\(pagesCount)", options: [], range: NSMakeRange(0, textString.length))
                 text.attributedString = textString
                 if NSLocationInRange(currentPage, text.pageRange) {
                     switch(text.type) {
@@ -366,7 +366,7 @@ public class SimplePDF {
             for var i = 0; i < self.headerFooterImages.count; i++ {
                 let image = self.headerFooterImages[i]
                 if(image.imagePath.isEmpty && image.image == nil) {
-                    println("ERROR: image path is empty and image is null, skipping")
+                    print("ERROR: image path is empty and image is null, skipping")
                     continue
                 }
                 if NSLocationInRange(currentPage, image.pageRange) {
@@ -388,7 +388,7 @@ public class SimplePDF {
                 suggestedSize.height = availableHeight
             }
             
-            var textRect = CGRect(x: availablePageRect.origin.x, y: availableHeight - suggestedSize.height, width: availablePageRect.width, height: suggestedSize.height)
+            let textRect = CGRect(x: availablePageRect.origin.x, y: availableHeight - suggestedSize.height, width: availablePageRect.width, height: suggestedSize.height)
             
             drawHeaderFooterText(framesetter, textRect: textRect)
         }
@@ -401,7 +401,7 @@ public class SimplePDF {
                 suggestedSize.height = availableHeight
             }
             
-            var textRect = CGRect(x: availablePageRect.origin.x, y: availablePageRect.origin.y + availablePageRect.size.height + 2, width: availablePageRect.width, height: suggestedSize.height)
+            let textRect = CGRect(x: availablePageRect.origin.x, y: availablePageRect.origin.y + availablePageRect.size.height + 2, width: availablePageRect.width, height: suggestedSize.height)
             
             drawHeaderFooterText(framesetter, textRect: textRect)
             
@@ -421,7 +421,7 @@ public class SimplePDF {
             CGPathAddRect(textPath, nil, textRect)
             let frameRef = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), textPath, nil)
             
-            CTFrameDraw(frameRef, context)
+            CTFrameDraw(frameRef, context!)
             
             // flip it back
             CGContextScaleCTM(context, 1.0, -1.0)
@@ -438,7 +438,7 @@ public class SimplePDF {
             if(image == nil) {
                 image = UIImage(contentsOfFile: header.imagePath)
                 if(image == nil) {
-                    println("ERROR: Unable to read image: \(header.imagePath)")
+                    print("ERROR: Unable to read image: \(header.imagePath)")
                     return
                 }
             }
@@ -457,7 +457,7 @@ public class SimplePDF {
             if(image == nil) {
                 image = UIImage(contentsOfFile: footer.imagePath)
                 if(image == nil) {
-                    println("ERROR: Unable to read image: \(footer.imagePath)")
+                    print("ERROR: Unable to read image: \(footer.imagePath)")
                     return
                 }
             }
@@ -533,14 +533,14 @@ public class SimplePDF {
             var funcCallRange = NSMakeRange(0, 0)
             
             var columnWidths = Array<CGFloat>()
-            var singleColumnWidth = availablePageRect.size.width / CGFloat(imagesPerRow)
+            let singleColumnWidth = availablePageRect.size.width / CGFloat(imagesPerRow)
             for var i = 0; i < imagesPerRow; i++ {
                 columnWidths.append(singleColumnWidth)
             }
             
             var attributedImageCaptions = Array<NSAttributedString>()
             for var i = 0; i < imageCaptions.count; i++ {
-                var mutableCaption = NSMutableAttributedString(attributedString: textFormatter.attributedStringForStyle(imageCaptions[i], style: .H6))
+                let mutableCaption = NSMutableAttributedString(attributedString: textFormatter.attributedStringForStyle(imageCaptions[i], style: .H6))
                 /* this doesn't work since captions are drawn using CTLine
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .Center
@@ -550,13 +550,13 @@ public class SimplePDF {
             
             
             var rowIndex = 0
-            do {
+            repeat {
                 var itemsToGet = imagesPerRow
                 if(imagePaths.count < itemsToGet){
                     itemsToGet = imagePaths.count
                 }
-                var rowImages = Array(imagePaths[0..<itemsToGet])
-                var rowCaptions = Array(attributedImageCaptions[0..<itemsToGet])
+                let rowImages = Array(imagePaths[0..<itemsToGet])
+                let rowCaptions = Array(attributedImageCaptions[0..<itemsToGet])
                 imagePaths[0..<itemsToGet] = []
                 attributedImageCaptions[0..<itemsToGet] = []
                 
@@ -589,7 +589,7 @@ public class SimplePDF {
                         continue
                     }
                     let thisImageProperties = SimplePDFUtilities.getImageProperties(imagePaths[i])
-                    imageProperties.append(thisImageProperties)
+                    imageProperties.append(thisImageProperties!)
                 }
                 
                 var maxLineHeight:CGFloat = 0
@@ -607,7 +607,6 @@ public class SimplePDF {
                 }
                 
                 // start a new page if needed
-                var allFitOnThisPage = true
                 for var i = 0; i < imagePaths.count; i++ {
                     let thisWidth = columnWidths[i] - (2 * padding)
                     let availableSpace = CGSize(width: CGFloat.max, height: availablePageRect.size.height - currentLocation.y)
@@ -624,7 +623,7 @@ public class SimplePDF {
                     let fitHeight = self.aspectFitHeightForWidth(imageSize, width: thisWidth)
                     if(fitHeight + maxLineHeight > availableSpace.height) {
                         funcCallRange.location = 1
-                        startNewPage(calculationOnly: calculationOnly)
+                        startNewPage(calculationOnly)
                         break
                     }
                 }
@@ -667,7 +666,7 @@ public class SimplePDF {
                             CGContextScaleCTM(context, 1.0, -1.0)
                             
                             CGContextSetTextPosition(context, textPoint.x, textPoint.y)
-                            CTLineDraw(truncatedLine, context)
+                            CTLineDraw(truncatedLine!, context!)
                             
                             // flip it back
                             CGContextScaleCTM(context, 1.0, -1.0)
@@ -745,7 +744,7 @@ public class SimplePDF {
             var availableSpace = CGSizeZero
             if((availablePageRect.size.height - currentLocation.y) <= 0) {
                 funcCallRange.location = 1
-                startNewPage(calculationOnly: calculationOnly)
+                startNewPage(calculationOnly)
             }
             else {
                 // decide if we start start a new page
@@ -778,7 +777,7 @@ public class SimplePDF {
                         }
                         
                         if(allStringsFitOnANewPage) {
-                            startNewPage(calculationOnly: calculationOnly)
+                            startNewPage(calculationOnly)
                             funcCallRange.location = 1
                         }
                     }
@@ -786,7 +785,7 @@ public class SimplePDF {
             }
             
             var done = false
-            do {
+            repeat {
                 var loc = currentLocation
                 var maxHeightRendered:CGFloat = 0
                 
@@ -807,7 +806,7 @@ public class SimplePDF {
                         break
                     }
                     var fitRange = CFRangeMake(0, 0)
-                    var suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(thisFramesetter, thisRange, nil, availableSpace, &fitRange)
+                    let suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(thisFramesetter, thisRange, nil, availableSpace, &fitRange)
                     
                     // draw string
                     var originalTextRect = CGRect(x: availablePageRect.origin.x + loc.x, y: availablePageRect.origin.y + loc.y,
@@ -836,7 +835,7 @@ public class SimplePDF {
                         CGPathAddRect(textPath, nil, textRect)
                         let frameRef = CTFramesetterCreateFrame(thisFramesetter, thisRange, textPath, nil)
                         
-                        CTFrameDraw(frameRef, context)
+                        CTFrameDraw(frameRef, context!)
                         
                         // flip it back
                         CGContextScaleCTM(context, 1.0, -1.0)
@@ -873,7 +872,7 @@ public class SimplePDF {
                 }
                 
                 if(shouldAddNewPage) {
-                    startNewPage(calculationOnly: calculationOnly)
+                    startNewPage(calculationOnly)
                     funcCallRange.length = funcCallRange.length + 1
                 }
                 else {
@@ -898,12 +897,12 @@ public class SimplePDF {
             var range = NSMakeRange(0, 0) // a view is always
             if(currentLocation.y > 0) {
                 range.location = 1
-                startNewPage(calculationOnly: calculationOnly)
+                startNewPage(calculationOnly)
             }
             
             if(calculationOnly == false) {
                 let context = UIGraphicsGetCurrentContext()
-                view.layer.renderInContext(context)
+                view.layer.renderInContext(context!)
             }
             
             // one view per page, set Y to maximum so that next call inserts a page
@@ -919,7 +918,7 @@ public class SimplePDF {
             var funcRange = NSMakeRange(0, 0)
             if(currentLocation.y > 0) {
                 funcRange.location = 1
-                startNewPage(calculationOnly: calculationOnly)
+                startNewPage(calculationOnly)
             }
             
             let headingRange = addH3("Table of Contents", backgroundBoxColor: nil, calculationOnly: calculationOnly)
@@ -975,7 +974,7 @@ public class SimplePDF {
             CGContextSetLineWidth(context, strokeWidth);
             CGContextMoveToPoint(context, p1.x, p1.y);
             CGContextAddLineToPoint(context, p2.x, p2.y);
-            CGContextDrawPath(context, kCGPathStroke);
+            CGContextDrawPath(context, CGPathDrawingMode.Stroke);
         }
         
         // MARK: - Utilities
@@ -1007,14 +1006,14 @@ public class SimplePDF {
         }
         
         private func aspectFitHeightForWidth(size: CGSize, width: CGFloat) -> CGFloat {
-            var ratio = size.width / width
-            var newHeight = size.height / ratio
+            let ratio = size.width / width
+            let newHeight = size.height / ratio
             return newHeight
         }
         
         private func aspectFitWidthForHeight(size: CGSize, height: CGFloat) -> CGFloat {
-            var ratio = size.height / height
-            var newWidth = size.width / ratio
+            let ratio = size.height / height
+            let newWidth = size.width / ratio
             return newWidth
         }
         
@@ -1170,8 +1169,8 @@ public class SimplePDF {
         self.pdfWriter = initializePDFWriter(0)
         var pageIndex = -1
         for (var i = 0; i < document.document.count; i++) {
-            var docElement = document.document[i]
-            let pageNumber = pageIndex + docElement.pageRange.location
+            let docElement = document.document[i]
+            //let pageNumber = pageIndex + docElement.pageRange.location
             docElement.executeFunctionCall(pdfWriter, calculationOnly: true)
             pageIndex += (docElement.pageRange.location + docElement.pageRange.length)
         }
@@ -1183,8 +1182,8 @@ public class SimplePDF {
         pageIndex = -1
         
         for (var i = 0; i < document.document.count; i++) {
-            var docElement = document.document[i]
-            let pageNumber = pageIndex + docElement.pageRange.location
+            let docElement = document.document[i]
+            //let pageNumber = pageIndex + docElement.pageRange.location
             docElement.executeFunctionCall(pdfWriter, calculationOnly: false)
             pageIndex += (docElement.pageRange.location + docElement.pageRange.length)
         }
@@ -1206,7 +1205,7 @@ public class SimplePDF {
         var tocInserted = false
         var pageIndex = -1
         for (var i = 0; i < document.document.count; i++) {
-            var docElement = document.document[i]
+            let docElement = document.document[i]
             let pageNumber = pageIndex + docElement.pageRange.location
             // if (location == 1 && pageNumber == document.tableOfContentsOnPage) || (location == 0 && pageNumber > document.tableOfContents) {
             if(pageNumber >= document.tableOfContentsOnPage && tocInserted == false) {
@@ -1238,7 +1237,7 @@ public class SimplePDF {
         pageIndex = -1
         
         for (var i = 0; i < document.document.count; i++) {
-            var docElement = document.document[i]
+            let docElement = document.document[i]
             let pageNumber = pageIndex + docElement.pageRange.location
             if(pageNumber >= document.tableOfContentsOnPage && tocInserted == false) {
                 tocInserted = true
@@ -1264,7 +1263,7 @@ public class SimplePDF {
     // NOTE: these functions should only be called by consumers of the class, don't call them internally because they change
     // the document structure
     public func startNewPage() -> NSRange {
-        let range = pdfWriter.startNewPage(calculationOnly: true)
+        let range = pdfWriter.startNewPage(true)
         let funcCall = DocumentStructure.FunctionCall.startNewPage
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
         document.document.append(docNode)
@@ -1327,7 +1326,7 @@ public class SimplePDF {
         return range
     }
     
-    public func addImages(var imagePaths:[String], imageCaptions: [String], imagesPerRow:Int = 3, spacing:CGFloat = 2, padding:CGFloat = 5) -> NSRange {
+    public func addImages(imagePaths:[String], imageCaptions: [String], imagesPerRow:Int = 3, spacing:CGFloat = 2, padding:CGFloat = 5) -> NSRange {
         let range = pdfWriter.addImages(imagePaths, imageCaptions: imageCaptions, imagesPerRow: imagesPerRow, spacing: spacing, padding: padding, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addImages(imagePaths: imagePaths, imageCaptions: imageCaptions, imagesPerRow: imagesPerRow, spacing: spacing, padding: padding)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)

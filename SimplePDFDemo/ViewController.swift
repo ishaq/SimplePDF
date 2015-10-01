@@ -47,7 +47,7 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         // open the generated PDF
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             let pdfURL = NSURL(fileURLWithPath: tmpPDFPath)
-            let interactionController = UIDocumentInteractionController(URL: pdfURL!)
+            let interactionController = UIDocumentInteractionController(URL: pdfURL)
             interactionController.delegate = self
             interactionController.presentPreviewAnimated(true)
         })
@@ -129,12 +129,12 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         
         // add some document information to the header, on left
         let leftHeaderString = "Author: Muhammad Ishaq\nDate/Time: \(dateString)"
-        var leftHeaderAttrString = NSMutableAttributedString(string: leftHeaderString)
+        let leftHeaderAttrString = NSMutableAttributedString(string: leftHeaderString)
         leftHeaderAttrString.addAttribute(NSParagraphStyleAttributeName, value: leftAlignment, range: NSMakeRange(0, leftHeaderAttrString.length))
         leftHeaderAttrString.addAttribute(NSFontAttributeName, value: regularFont, range: NSMakeRange(0, leftHeaderAttrString.length))
         leftHeaderAttrString.addAttribute(NSFontAttributeName, value: boldFont, range: leftHeaderAttrString.mutableString.rangeOfString("Author:"))
         leftHeaderAttrString.addAttribute(NSFontAttributeName, value: boldFont, range: leftHeaderAttrString.mutableString.rangeOfString("Date/Time:"))
-        var header = SimplePDF.HeaderFooterText(type: .Header, pageRange: NSMakeRange(1, Int.max), attributedString: leftHeaderAttrString)
+        let header = SimplePDF.HeaderFooterText(type: .Header, pageRange: NSMakeRange(1, Int.max), attributedString: leftHeaderAttrString)
         pdf.headerFooterTexts.append(header)
         
         // add a logo to the header, on right
@@ -147,15 +147,15 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         // add page numbers to the footer (center aligned)
         let centerAlignment = NSMutableParagraphStyle()
         centerAlignment.alignment = .Center
-        var footerString = NSMutableAttributedString(string: "\(pdf.kPageNumberPlaceholder) of \(pdf.kPagesCountPlaceholder)")
+        let footerString = NSMutableAttributedString(string: "\(pdf.kPageNumberPlaceholder) of \(pdf.kPagesCountPlaceholder)")
         footerString.addAttribute(NSParagraphStyleAttributeName, value: centerAlignment, range: NSMakeRange(0, footerString.length))
-        var footer = SimplePDF.HeaderFooterText(type: .Footer, pageRange: NSMakeRange(1, Int.max), attributedString: footerString)
+        let footer = SimplePDF.HeaderFooterText(type: .Footer, pageRange: NSMakeRange(1, Int.max), attributedString: footerString)
         pdf.headerFooterTexts.append(footer)
         
         // add a link to your app may be
-        var link = NSMutableAttributedString(string: "http://ishaq.pk/")
+        let link = NSMutableAttributedString(string: "http://ishaq.pk/")
         link.addAttribute(NSParagraphStyleAttributeName, value: leftAlignment, range: NSMakeRange(0, link.length))
-        var appLinkFooter = SimplePDF.HeaderFooterText(type: .Footer, pageRange: NSMakeRange(1, Int.max), attributedString: link)
+        let appLinkFooter = SimplePDF.HeaderFooterText(type: .Footer, pageRange: NSMakeRange(1, Int.max), attributedString: link)
         pdf.headerFooterTexts.append(appLinkFooter)
         
         // NOTE: we can specify either the image or its path

@@ -36,36 +36,37 @@ class SimplePDFUtilities {
         return name as String
     }
     
-    class func pathForTmpFile(fileName: String) -> String {
-        let fileManager = NSFileManager()
-        let tmpDirPath = NSTemporaryDirectory()
-        let path = tmpDirPath.stringByAppendingPathComponent(fileName)
-        return path
+    class func pathForTmpFile(fileName: String) -> NSURL {
+        let tmpDirURL = NSURL(fileURLWithPath: NSTemporaryDirectory())
+        let pathURL = tmpDirURL.URLByAppendingPathComponent(fileName)
+        return pathURL
     }
     
-    class func renameFilePathToPreventNameCollissions(path: String) -> String {
+    class func renameFilePathToPreventNameCollissions(url: NSURL) -> String {
         let fileManager = NSFileManager()
         
         // append a postfix if file name is already taken
         var postfix = 0
-        var newPath = path
+        var newPath = url.path!
         while(fileManager.fileExistsAtPath(newPath)) {
             postfix++
             
-            let pathExtension = path.pathExtension
-            newPath = path.stringByDeletingPathExtension
+            let pathExtension = url.pathExtension
+            newPath = url.URLByDeletingPathExtension!.path!
             newPath = newPath.stringByAppendingString(" \(postfix)")
-            newPath = newPath.stringByAppendingPathExtension(pathExtension)!
+            var newPathURL = NSURL(fileURLWithPath: newPath)
+            newPathURL = newPathURL.URLByAppendingPathExtension(pathExtension!)
+            newPath = newPathURL.path!
         }
         
         return newPath
     }
     
-    class func getImageProperties(imagePath: String) -> NSDictionary {
+    class func getImageProperties(imagePath: String) -> Dictionary<NSObject, AnyObject>? {
         let imageURL = NSURL(fileURLWithPath: imagePath)
         let imageSourceRef = CGImageSourceCreateWithURL(imageURL, nil)
-        let props = CGImageSourceCopyPropertiesAtIndex(imageSourceRef, 0, nil)
-        return props as NSDictionary
+        let props = CGImageSourceCopyPropertiesAtIndex(imageSourceRef!, 0, nil) as Dictionary?
+        return props
     }
     
     class func getNumericListAlphabeticTitleFromInteger(value: Int) -> String {
@@ -73,7 +74,7 @@ class SimplePDFUtilities {
         let unicodeLetterA :UnicodeScalar = "\u{0061}" // a
         var mutableValue = value
         var result = ""
-        do {
+        repeat {
             let remainder = mutableValue % base
             mutableValue = mutableValue - remainder
             mutableValue = mutableValue / base
@@ -93,12 +94,10 @@ class SimplePDFUtilities {
                     kCGImageSourceCreateThumbnailFromImageIfAbsent as String: true
                 ]
                 
-                let scaledImage = UIImage(CGImage: CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options))
-                if let thumbnail = scaledImage {
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        callback(thumbnail: thumbnail, fromURL: imageURL, size: size)
-                    })
-                }
+                let scaledImage = UIImage(CGImage: CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options)!)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    callback(thumbnail: scaledImage, fromURL: imageURL, size: size)
+                })
             }
         })
     }
