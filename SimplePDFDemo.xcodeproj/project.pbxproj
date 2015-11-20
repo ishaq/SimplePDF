@@ -17,6 +17,12 @@
 		57472A561AC8573500FED8E6 /* SimplePDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57472A531AC8573500FED8E6 /* SimplePDF.swift */; };
 		57472A571AC8573500FED8E6 /* SimplePDFUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57472A541AC8573500FED8E6 /* SimplePDFUtilities.swift */; };
 		578689E71AC87FA400BA6821 /* Demo.png in Resources */ = {isa = PBXBuildFile; fileRef = 578689E61AC87FA400BA6821 /* Demo.png */; };
+		ED1179D01BFE1E6700DDCDBA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1179CF1BFE1E6700DDCDBA /* AppDelegate.swift */; };
+		ED1179D21BFE1E6700DDCDBA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1179D11BFE1E6700DDCDBA /* ViewController.swift */; };
+		ED1179D41BFE1E6700DDCDBA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED1179D31BFE1E6700DDCDBA /* Assets.xcassets */; };
+		ED1179D71BFE1E6700DDCDBA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED1179D51BFE1E6700DDCDBA /* Main.storyboard */; };
+		ED1179E21BFE1E6700DDCDBA /* SimplePDFDemoOSXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1179E11BFE1E6700DDCDBA /* SimplePDFDemoOSXTests.swift */; };
+		ED1179ED1BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1179EC1BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,6 +32,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 57472A2B1AC8567700FED8E6;
 			remoteInfo = SimplePDFDemo;
+		};
+		ED1179DE1BFE1E6700DDCDBA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 57472A241AC8567700FED8E6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ED1179CC1BFE1E6700DDCDBA;
+			remoteInfo = SimplePDFDemoOSX;
+		};
+		ED1179E91BFE1E6700DDCDBA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 57472A241AC8567700FED8E6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ED1179CC1BFE1E6700DDCDBA;
+			remoteInfo = SimplePDFDemoOSX;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -44,6 +64,18 @@
 		57472A531AC8573500FED8E6 /* SimplePDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePDF.swift; sourceTree = "<group>"; };
 		57472A541AC8573500FED8E6 /* SimplePDFUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePDFUtilities.swift; sourceTree = "<group>"; };
 		578689E61AC87FA400BA6821 /* Demo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Demo.png; sourceTree = "<group>"; };
+		ED1179CD1BFE1E6700DDCDBA /* SimplePDFDemoOSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimplePDFDemoOSX.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED1179CF1BFE1E6700DDCDBA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		ED1179D11BFE1E6700DDCDBA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		ED1179D31BFE1E6700DDCDBA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		ED1179D61BFE1E6700DDCDBA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		ED1179D81BFE1E6700DDCDBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ED1179DD1BFE1E6700DDCDBA /* SimplePDFDemoOSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimplePDFDemoOSXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED1179E11BFE1E6700DDCDBA /* SimplePDFDemoOSXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplePDFDemoOSXTests.swift; sourceTree = "<group>"; };
+		ED1179E31BFE1E6700DDCDBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ED1179E81BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimplePDFDemoOSXUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED1179EC1BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplePDFDemoOSXUITests.swift; sourceTree = "<group>"; };
+		ED1179EE1BFE1E6700DDCDBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +93,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ED1179CA1BFE1E6700DDCDBA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED1179DA1BFE1E6700DDCDBA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED1179E51BFE1E6700DDCDBA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -70,6 +123,9 @@
 				57472A511AC8573500FED8E6 /* SimplePDF */,
 				57472A2E1AC8567700FED8E6 /* SimplePDFDemo */,
 				57472A441AC8567800FED8E6 /* SimplePDFDemoTests */,
+				ED1179CE1BFE1E6700DDCDBA /* SimplePDFDemoOSX */,
+				ED1179E01BFE1E6700DDCDBA /* SimplePDFDemoOSXTests */,
+				ED1179EB1BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests */,
 				57472A2D1AC8567700FED8E6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -79,6 +135,9 @@
 			children = (
 				57472A2C1AC8567700FED8E6 /* SimplePDFDemo.app */,
 				57472A411AC8567800FED8E6 /* SimplePDFDemoTests.xctest */,
+				ED1179CD1BFE1E6700DDCDBA /* SimplePDFDemoOSX.app */,
+				ED1179DD1BFE1E6700DDCDBA /* SimplePDFDemoOSXTests.xctest */,
+				ED1179E81BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -132,6 +191,36 @@
 			path = SimplePDF;
 			sourceTree = "<group>";
 		};
+		ED1179CE1BFE1E6700DDCDBA /* SimplePDFDemoOSX */ = {
+			isa = PBXGroup;
+			children = (
+				ED1179CF1BFE1E6700DDCDBA /* AppDelegate.swift */,
+				ED1179D11BFE1E6700DDCDBA /* ViewController.swift */,
+				ED1179D31BFE1E6700DDCDBA /* Assets.xcassets */,
+				ED1179D51BFE1E6700DDCDBA /* Main.storyboard */,
+				ED1179D81BFE1E6700DDCDBA /* Info.plist */,
+			);
+			path = SimplePDFDemoOSX;
+			sourceTree = "<group>";
+		};
+		ED1179E01BFE1E6700DDCDBA /* SimplePDFDemoOSXTests */ = {
+			isa = PBXGroup;
+			children = (
+				ED1179E11BFE1E6700DDCDBA /* SimplePDFDemoOSXTests.swift */,
+				ED1179E31BFE1E6700DDCDBA /* Info.plist */,
+			);
+			path = SimplePDFDemoOSXTests;
+			sourceTree = "<group>";
+		};
+		ED1179EB1BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests */ = {
+			isa = PBXGroup;
+			children = (
+				ED1179EC1BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests.swift */,
+				ED1179EE1BFE1E6700DDCDBA /* Info.plist */,
+			);
+			path = SimplePDFDemoOSXUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -170,6 +259,59 @@
 			productReference = 57472A411AC8567800FED8E6 /* SimplePDFDemoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		ED1179CC1BFE1E6700DDCDBA /* SimplePDFDemoOSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ED1179F51BFE1E6700DDCDBA /* Build configuration list for PBXNativeTarget "SimplePDFDemoOSX" */;
+			buildPhases = (
+				ED1179C91BFE1E6700DDCDBA /* Sources */,
+				ED1179CA1BFE1E6700DDCDBA /* Frameworks */,
+				ED1179CB1BFE1E6700DDCDBA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SimplePDFDemoOSX;
+			productName = SimplePDFDemoOSX;
+			productReference = ED1179CD1BFE1E6700DDCDBA /* SimplePDFDemoOSX.app */;
+			productType = "com.apple.product-type.application";
+		};
+		ED1179DC1BFE1E6700DDCDBA /* SimplePDFDemoOSXTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ED1179F61BFE1E6700DDCDBA /* Build configuration list for PBXNativeTarget "SimplePDFDemoOSXTests" */;
+			buildPhases = (
+				ED1179D91BFE1E6700DDCDBA /* Sources */,
+				ED1179DA1BFE1E6700DDCDBA /* Frameworks */,
+				ED1179DB1BFE1E6700DDCDBA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ED1179DF1BFE1E6700DDCDBA /* PBXTargetDependency */,
+			);
+			name = SimplePDFDemoOSXTests;
+			productName = SimplePDFDemoOSXTests;
+			productReference = ED1179DD1BFE1E6700DDCDBA /* SimplePDFDemoOSXTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		ED1179E71BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ED1179F71BFE1E6700DDCDBA /* Build configuration list for PBXNativeTarget "SimplePDFDemoOSXUITests" */;
+			buildPhases = (
+				ED1179E41BFE1E6700DDCDBA /* Sources */,
+				ED1179E51BFE1E6700DDCDBA /* Frameworks */,
+				ED1179E61BFE1E6700DDCDBA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ED1179EA1BFE1E6700DDCDBA /* PBXTargetDependency */,
+			);
+			name = SimplePDFDemoOSXUITests;
+			productName = SimplePDFDemoOSXUITests;
+			productReference = ED1179E81BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -177,7 +319,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Kahaf;
 				TargetAttributes = {
@@ -187,6 +329,17 @@
 					57472A401AC8567800FED8E6 = {
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 57472A2B1AC8567700FED8E6;
+					};
+					ED1179CC1BFE1E6700DDCDBA = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
+					ED1179DC1BFE1E6700DDCDBA = {
+						CreatedOnToolsVersion = 7.1.1;
+						TestTargetID = ED1179CC1BFE1E6700DDCDBA;
+					};
+					ED1179E71BFE1E6700DDCDBA = {
+						CreatedOnToolsVersion = 7.1.1;
+						TestTargetID = ED1179CC1BFE1E6700DDCDBA;
 					};
 				};
 			};
@@ -205,6 +358,9 @@
 			targets = (
 				57472A2B1AC8567700FED8E6 /* SimplePDFDemo */,
 				57472A401AC8567800FED8E6 /* SimplePDFDemoTests */,
+				ED1179CC1BFE1E6700DDCDBA /* SimplePDFDemoOSX */,
+				ED1179DC1BFE1E6700DDCDBA /* SimplePDFDemoOSXTests */,
+				ED1179E71BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -222,6 +378,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		57472A3F1AC8567800FED8E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED1179CB1BFE1E6700DDCDBA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED1179D41BFE1E6700DDCDBA /* Assets.xcassets in Resources */,
+				ED1179D71BFE1E6700DDCDBA /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED1179DB1BFE1E6700DDCDBA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED1179E61BFE1E6700DDCDBA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -251,6 +430,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ED1179C91BFE1E6700DDCDBA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED1179D21BFE1E6700DDCDBA /* ViewController.swift in Sources */,
+				ED1179D01BFE1E6700DDCDBA /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED1179D91BFE1E6700DDCDBA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED1179E21BFE1E6700DDCDBA /* SimplePDFDemoOSXTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED1179E41BFE1E6700DDCDBA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED1179ED1BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -258,6 +462,16 @@
 			isa = PBXTargetDependency;
 			target = 57472A2B1AC8567700FED8E6 /* SimplePDFDemo */;
 			targetProxy = 57472A421AC8567800FED8E6 /* PBXContainerItemProxy */;
+		};
+		ED1179DF1BFE1E6700DDCDBA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ED1179CC1BFE1E6700DDCDBA /* SimplePDFDemoOSX */;
+			targetProxy = ED1179DE1BFE1E6700DDCDBA /* PBXContainerItemProxy */;
+		};
+		ED1179EA1BFE1E6700DDCDBA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ED1179CC1BFE1E6700DDCDBA /* SimplePDFDemoOSX */;
+			targetProxy = ED1179E91BFE1E6700DDCDBA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -276,6 +490,14 @@
 				57472A3B1AC8567700FED8E6 /* Base */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		ED1179D51BFE1E6700DDCDBA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ED1179D61BFE1E6700DDCDBA /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -413,6 +635,112 @@
 			};
 			name = Release;
 		};
+		ED1179EF1BFE1E6700DDCDBA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = SimplePDFDemoOSX/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dervishsoftware.SimplePDFDemoOSX;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		ED1179F01BFE1E6700DDCDBA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = SimplePDFDemoOSX/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dervishsoftware.SimplePDFDemoOSX;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		ED1179F11BFE1E6700DDCDBA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = SimplePDFDemoOSXTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dervishsoftware.SimplePDFDemoOSXTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimplePDFDemoOSX.app/Contents/MacOS/SimplePDFDemoOSX";
+			};
+			name = Debug;
+		};
+		ED1179F21BFE1E6700DDCDBA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = SimplePDFDemoOSXTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dervishsoftware.SimplePDFDemoOSXTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimplePDFDemoOSX.app/Contents/MacOS/SimplePDFDemoOSX";
+			};
+			name = Release;
+		};
+		ED1179F31BFE1E6700DDCDBA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = SimplePDFDemoOSXUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dervishsoftware.SimplePDFDemoOSXUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_TARGET_NAME = SimplePDFDemoOSX;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		ED1179F41BFE1E6700DDCDBA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = SimplePDFDemoOSXUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dervishsoftware.SimplePDFDemoOSXUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_TARGET_NAME = SimplePDFDemoOSX;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -442,6 +770,30 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		ED1179F51BFE1E6700DDCDBA /* Build configuration list for PBXNativeTarget "SimplePDFDemoOSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED1179EF1BFE1E6700DDCDBA /* Debug */,
+				ED1179F01BFE1E6700DDCDBA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		ED1179F61BFE1E6700DDCDBA /* Build configuration list for PBXNativeTarget "SimplePDFDemoOSXTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED1179F11BFE1E6700DDCDBA /* Debug */,
+				ED1179F21BFE1E6700DDCDBA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		ED1179F71BFE1E6700DDCDBA /* Build configuration list for PBXNativeTarget "SimplePDFDemoOSXUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED1179F31BFE1E6700DDCDBA /* Debug */,
+				ED1179F41BFE1E6700DDCDBA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
