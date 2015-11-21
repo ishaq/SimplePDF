@@ -23,6 +23,10 @@
 		ED1179D71BFE1E6700DDCDBA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED1179D51BFE1E6700DDCDBA /* Main.storyboard */; };
 		ED1179E21BFE1E6700DDCDBA /* SimplePDFDemoOSXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1179E11BFE1E6700DDCDBA /* SimplePDFDemoOSXTests.swift */; };
 		ED1179ED1BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1179EC1BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests.swift */; };
+		ED117A071BFF240B00DDCDBA /* SimplePDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED117A011BFF23FA00DDCDBA /* SimplePDF.swift */; };
+		ED117A081BFF240F00DDCDBA /* SimplePDFLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED117A021BFF23FA00DDCDBA /* SimplePDFLabel.swift */; };
+		ED117A091BFF241300DDCDBA /* SimplePDFUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED117A031BFF23FA00DDCDBA /* SimplePDFUtilities.swift */; };
+		ED117A0A1BFF255D00DDCDBA /* Demo.png in Resources */ = {isa = PBXBuildFile; fileRef = 578689E61AC87FA400BA6821 /* Demo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +80,9 @@
 		ED1179E81BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimplePDFDemoOSXUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED1179EC1BFE1E6700DDCDBA /* SimplePDFDemoOSXUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplePDFDemoOSXUITests.swift; sourceTree = "<group>"; };
 		ED1179EE1BFE1E6700DDCDBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ED117A011BFF23FA00DDCDBA /* SimplePDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePDF.swift; sourceTree = "<group>"; };
+		ED117A021BFF23FA00DDCDBA /* SimplePDFLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePDFLabel.swift; sourceTree = "<group>"; };
+		ED117A031BFF23FA00DDCDBA /* SimplePDFUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePDFUtilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +127,7 @@
 		57472A231AC8567700FED8E6 = {
 			isa = PBXGroup;
 			children = (
+				ED117A001BFF23FA00DDCDBA /* SimplePDFOSX */,
 				57472A511AC8573500FED8E6 /* SimplePDF */,
 				57472A2E1AC8567700FED8E6 /* SimplePDFDemo */,
 				57472A441AC8567800FED8E6 /* SimplePDFDemoTests */,
@@ -219,6 +227,16 @@
 				ED1179EE1BFE1E6700DDCDBA /* Info.plist */,
 			);
 			path = SimplePDFDemoOSXUITests;
+			sourceTree = "<group>";
+		};
+		ED117A001BFF23FA00DDCDBA /* SimplePDFOSX */ = {
+			isa = PBXGroup;
+			children = (
+				ED117A011BFF23FA00DDCDBA /* SimplePDF.swift */,
+				ED117A021BFF23FA00DDCDBA /* SimplePDFLabel.swift */,
+				ED117A031BFF23FA00DDCDBA /* SimplePDFUtilities.swift */,
+			);
+			path = SimplePDFOSX;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -388,6 +406,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED117A0A1BFF255D00DDCDBA /* Demo.png in Resources */,
 				ED1179D41BFE1E6700DDCDBA /* Assets.xcassets in Resources */,
 				ED1179D71BFE1E6700DDCDBA /* Main.storyboard in Resources */,
 			);
@@ -434,8 +453,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED117A091BFF241300DDCDBA /* SimplePDFUtilities.swift in Sources */,
 				ED1179D21BFE1E6700DDCDBA /* ViewController.swift in Sources */,
 				ED1179D01BFE1E6700DDCDBA /* AppDelegate.swift in Sources */,
+				ED117A071BFF240B00DDCDBA /* SimplePDF.swift in Sources */,
+				ED117A081BFF240F00DDCDBA /* SimplePDFLabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

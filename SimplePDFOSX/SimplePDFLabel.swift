@@ -17,7 +17,7 @@ class SimplePDFLabel: NSTextField {
     */
     
     override func drawLayer(layer: CALayer, inContext ctx: CGContext) {
-        let isPDF = !CGRectIsEmpty(UIGraphicsGetPDFContextBounds())
+        let isPDF = !CGRectIsEmpty(CGPDFPageGetBoxRect(nil, CGPDFBox.MediaBox))
         
         if(!layer.shouldRasterize && isPDF && (self.backgroundColor == nil || CGColorGetAlpha(self.backgroundColor?.CGColor) == 0)) {
             self.drawRect(self.bounds)

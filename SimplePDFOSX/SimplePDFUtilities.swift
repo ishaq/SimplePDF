@@ -8,6 +8,45 @@ import Foundation
 import ImageIO
 import Cocoa
 
+extension CIImage {
+        func flippedImage(horizontal: Bool = false) -> CIImage? {
+                
+                var result : CIImage?
+                
+                if let transform = CIFilter(name:"CIAffineTransform") {
+                        transform.setValue(self, forKey:"inputImage")
+                        
+                        let affineTransform = NSAffineTransform();
+                        let xy : (CGFloat, CGFloat) = horizontal ? (-1,1) : (1,-1)
+                        affineTransform.scaleXBy(xy.0, yBy:xy.1)
+                        transform.setValue(affineTransform, forKey:"inputTransform")
+                        
+                        result = transform.valueForKey("outputImage") as? CIImage
+                }
+                return result
+                
+        }
+        
+        func drawInCGContext(context: CGContextRef!, destRect: CGRect!) {
+                let ci = CIContext(CGContext: context, options: nil)
+                ci.drawImage(self
+                        , inRect: destRect
+                        , fromRect: self.extent)
+                
+        }
+        
+        class func fromNSImage(i: NSImage?) -> CIImage? {
+                guard let img = i else {return nil}
+                // convert NSImage to bitmap
+                if let tiffData = img.TIFFRepresentation {
+                        if let bitmap = NSBitmapImageRep.init(data: tiffData) {
+                                return CIImage(bitmapImageRep: bitmap)
+                        }
+                }
+                return nil
+        }
+}
+
 class SimplePDFUtilities {
     class func getApplicationVersion() -> String {
         var dictionary: Dictionary<NSObject, AnyObject>!
@@ -94,7 +133,7 @@ class SimplePDFUtilities {
                     kCGImageSourceCreateThumbnailFromImageIfAbsent as String: true
                 ]
                 
-                let scaledImage = NSImage(CGImage: CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options)!)
+                let scaledImage = NSImage(CGImage: CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options)!, size: size)
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     callback(thumbnail: scaledImage, fromURL: imageURL, size: size)
                 })
@@ -102,3 +141,4 @@ class SimplePDFUtilities {
         })
     }
 }
+
