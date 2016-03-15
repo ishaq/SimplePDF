@@ -17,8 +17,8 @@ class SimplePDFUtilities {
         else {
             dictionary = NSBundle.mainBundle().infoDictionary!
         }
-        let build = dictionary["CFBundleVersion"] as! NSString
-        let shortVersionString = dictionary["CFBundleShortVersionString"] as! NSString
+        let build = dictionary["CFBundleVersion"] as? String
+        let shortVersionString = dictionary["CFBundleShortVersionString"] as? String
         
         return "(\(shortVersionString) Build: \(build))"
     }
@@ -36,37 +36,44 @@ class SimplePDFUtilities {
         return name as String
     }
     
-    class func pathForTmpFile(fileName: String) -> NSURL {
-        let tmpDirURL = NSURL(fileURLWithPath: NSTemporaryDirectory())
-        let pathURL = tmpDirURL.URLByAppendingPathComponent(fileName)
-        return pathURL
+    class func pathForTmpFile(fileName: String) -> String {
+        let tmpDirPath = NSTemporaryDirectory() as NSString
+        let path = tmpDirPath.stringByAppendingPathComponent(fileName)
+        return path
     }
     
-    class func renameFilePathToPreventNameCollissions(url: NSURL) -> String {
+    class func renameFilePathToPreventNameCollissions(path: NSString) -> String {
         let fileManager = NSFileManager()
         
         // append a postfix if file name is already taken
         var postfix = 0
-        var newPath = url.path!
-        while(fileManager.fileExistsAtPath(newPath)) {
+        var newPath = path
+        while(fileManager.fileExistsAtPath(newPath as String)) {
             postfix++
             
-            let pathExtension = url.pathExtension
-            newPath = url.URLByDeletingPathExtension!.path!
+            let pathExtension = path.pathExtension
+            newPath = path.stringByDeletingPathExtension
             newPath = newPath.stringByAppendingString(" \(postfix)")
-            var newPathURL = NSURL(fileURLWithPath: newPath)
-            newPathURL = newPathURL.URLByAppendingPathExtension(pathExtension!)
-            newPath = newPathURL.path!
+            newPath = newPath.stringByAppendingPathExtension(pathExtension)!
         }
         
-        return newPath
+        return newPath as String
     }
     
-    class func getImageProperties(imagePath: String) -> Dictionary<NSObject, AnyObject>? {
+    class func getImageProperties(imagePath: String) -> NSDictionary {
         let imageURL = NSURL(fileURLWithPath: imagePath)
-        let imageSourceRef = CGImageSourceCreateWithURL(imageURL, nil)
-        let props = CGImageSourceCopyPropertiesAtIndex(imageSourceRef!, 0, nil) as Dictionary?
-        return props
+        guard let imageSourceRef = CGImageSourceCreateWithURL(imageURL, nil) else {
+            return NSDictionary()
+        }
+
+        let propertiesAsCFDictionary = CGImageSourceCopyPropertiesAtIndex(imageSourceRef, 0, nil)
+        // translating it to an optional NSDictionary (instead of as? operator) because:
+        // http://stackoverflow.com/questions/32716146/cfdictionary-wont-bridge-to-nsdictionary-swift-2-0-ios9
+        guard let propertiesAsNSDictionary = propertiesAsCFDictionary as NSDictionary? else {
+            return NSDictionary()
+        }
+        
+        return propertiesAsNSDictionary
     }
     
     class func getNumericListAlphabeticTitleFromInteger(value: Int) -> String {
@@ -94,10 +101,12 @@ class SimplePDFUtilities {
                     kCGImageSourceCreateThumbnailFromImageIfAbsent as String: true
                 ]
                 
-                let scaledImage = UIImage(CGImage: CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options)!)
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    callback(thumbnail: scaledImage, fromURL: imageURL, size: size)
-                })
+                if let cgImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options) {
+                    let thumbnail = UIImage(CGImage: cgImage)
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        callback(thumbnail: thumbnail, fromURL: imageURL, size: size)
+                    })
+                }
             }
         })
     }
