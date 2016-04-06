@@ -109,8 +109,7 @@ let footer = SimplePDF.HeaderFooterText(type: .Footer, pageRange: NSMakeRange(1,
 pdf.headerFooterTexts.append(footer)
 ```
 
-
-### Adding View
+### Adding a View
 You can call `addView(view)` to render UIView instances to a PDF page. The passed view will be rendered new PDF page. This is mostly useful to design cover pages. A view is always added to its own page. It starts a new page if required, and any content added after it appears on the next page.
 
 Here's how you can design a cover page with a UIView (or a subclass)
@@ -124,8 +123,21 @@ let coverPage = NSBundle.mainBundle().loadNibNamed("PDFCoverPage", owner: self, 
 pdf.addView(coverPage)
 ```
 
-#### Note
-Please note that if you use the above method to render a view to PDF, AutoLayout will **not** be run on it, If your view doesn't rely on AutoLayout, you don't need to worry about anything. However, if your view uses AutoLayout to correctly position elements, you **have to** add it to the active view hierarchy. You can add to the view hierarchy off-screen, then call `pdf.addView(view)` to render it to PDF. But now the view would render as *bitmap*. This means any labels will not be selectable as text and they would lose quality if you zoom in (being bitmaps).
+**Note:** Please note that if you use the above method to render a view to PDF, AutoLayout will **not** be run on it, If your view doesn't rely on AutoLayout, you don't need to worry about anything. However, if your view uses AutoLayout to correctly position elements, you **have to** add it to the active view hierarchy. You can add to the view hierarchy off-screen, then call `pdf.addView(view)` to render it to PDF. But now the view would render as *bitmap*. This means any labels will not be selectable as text and they would lose quality if you zoom in (being bitmaps).
+
+### Customizing Heading and Body Text Formatting
+To customize used in `addH1` ... `addH6` and `addBodyText` functions, you need to:
+
+1. Subclass `DefaultTextFormatter` and override appropriate methods
+2. Pass instance of your custom subclass to `SimplePDF`'s `init`.
+
+SimplePDF will now use your subclass instead of `DefaultTextFormatter` to format headings and body text.
+
+### Other Tasks
+* You can add attributed strings with `addAttributedString(attrString)`. These strings are not taken into account when generating table of contents. Passing empty string keeps corresponding column empty.
+* You can add text to multiple columns with `addAttributedStringsToColumns(columnWidths: [CGFloat], strings: [NSAttributedString])`. This can also be used to create borderless tables. Passing empty string keeps corresponding column empty.
+* `addImages(imagePaths:[String], imageCaptions: [String], imagesPerRow:Int = 3)` adds images to pdf. It resizes the images uniformly to fit `imagesPerRow` images in available page width. Passing nil for image (and empty string for caption) keeps corresponding column empty.
+* `addImagesRow(imagePaths: [String], imageCaptions: [NSAttributedString], columnWidths: [CGFloat])` adds a single row of images using column widths specified. Passing nil for image (and empty string for caption) keeps corresponding column empty.
 
 ## License
 ```
