@@ -1356,9 +1356,9 @@ public class SimplePDF {
     }
     
     // This function can be used to render a view to a PDF page (mostly useful to design cover pages). A view is always added to its own page. It starts 
-    // a new page if required, and any contented added after it appears on the next page.
+    // a new page if required, and any content added after it appears on the next page.
     //
-    // Here's how you can design a cover page with using a UIView (sample applies to any other view that you want to add to pdf)
+    // Here's how you can design a cover page with a UIView (sample applies to any other view that you want to add to pdf)
     // 1. Create a nib with the same dimensions as PDF page (e.g. A4 page is 595x842)
     // 2. All the labels in the view should have their class set to `SimplePDFLabel` (or a subclass of it)
     // 3. Load the view from the nib and add it to pdf
