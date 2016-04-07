@@ -1,4 +1,4 @@
-# SimplePDFSwift
+# SimplePDF
 
 <!-- [![CI Status](http://img.shields.io/travis/Muhammad Ishaq/SimplePDF.svg?style=flat)](https://travis-ci.org/Muhammad Ishaq/SimplePDF) -->
 [![Version](https://img.shields.io/cocoapods/v/SimplePDFSwift.svg?style=flat)](http://cocoapods.org/pods/SimplePDF)
