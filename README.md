@@ -164,7 +164,7 @@ SimplePDF will now use your subclass instead of `DefaultTextFormatter` to format
 
 ## Author
 
-Muhammad Ishaq, ishaq@involution.co
+Muhammad Ishaq, ishaq@ishaq.pk
 
 ## License
 
