@@ -1,12 +1,14 @@
 //
 //  ViewController.swift
-//  SimplePDFDemo
+//  SimplePDF
 //
-//  Created by Muhammad Ishaq on 29/03/2015.
-//  Copyright (c) 2015 Kahaf. All rights reserved.
+//  Created by Muhammad Ishaq on 04/07/2016.
+//  Copyright (c) 2016 Muhammad Ishaq. All rights reserved.
 //
 
 import UIKit
+import SimplePDF
+
 
 class ViewController: UIViewController, UIDocumentInteractionControllerDelegate {
 
@@ -19,7 +21,7 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     @IBAction func generateAndOpenPDF(sender: AnyObject) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
             self.generateAndOpenPDFHandler()
@@ -141,7 +143,7 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         let logoPath = NSBundle.mainBundle().pathForResource("Demo", ofType: "png")
         // NOTE: we can specify either the image or its path
         let rightLogo = SimplePDF.HeaderFooterImage(type: .Header, pageRange: NSMakeRange(1, Int.max),
-            imagePath: logoPath!, image:nil, imageHeight: 35, alignment: .Right)
+                                                    imagePath: logoPath!, image:nil, imageHeight: 35, alignment: .Right)
         pdf.headerFooterImages.append(rightLogo)
         
         // add page numbers to the footer (center aligned)
@@ -160,9 +162,8 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         
         // NOTE: we can specify either the image or its path
         let footerImage = SimplePDF.HeaderFooterImage(type: .Footer, pageRange: NSMakeRange(1, Int.max),
-            imagePath: logoPath!, image:nil, imageHeight: 20, alignment: .Right)
+                                                      imagePath: logoPath!, image:nil, imageHeight: 20, alignment: .Right)
         pdf.headerFooterImages.append(footerImage)
     }
-
 }
 

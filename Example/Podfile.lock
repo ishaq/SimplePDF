@@ -1,0 +1,20 @@
+PODS:
+  - Nimble (3.2.0)
+  - Quick (0.9.1)
+  - SimplePDF (0.1.0)
+
+DEPENDENCIES:
+  - Nimble (~> 3.0)
+  - Quick (~> 0.8)
+  - SimplePDF (from `../`)
+
+EXTERNAL SOURCES:
+  SimplePDF:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Nimble: 703854335d181df169bbca9c97117b5cf8c47c1d
+  Quick: a5221fc21788b6aeda934805e68b061839bc3165
+  SimplePDF: 404d41e2c179a496b9a3299a98bd032bb1e05235
+
+COCOAPODS: 0.39.0

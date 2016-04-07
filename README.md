@@ -1,5 +1,29 @@
 # SimplePDF
+
+<!-- [![CI Status](http://img.shields.io/travis/Muhammad Ishaq/SimplePDF.svg?style=flat)](https://travis-ci.org/Muhammad Ishaq/SimplePDF) -->
+[![Version](https://img.shields.io/cocoapods/v/SimplePDF.svg?style=flat)](http://cocoapods.org/pods/SimplePDF)
+[![License](https://img.shields.io/cocoapods/l/SimplePDF.svg?style=flat)](http://cocoapods.org/pods/SimplePDF)
+[![Platform](https://img.shields.io/cocoapods/p/SimplePDF.svg?style=flat)](http://cocoapods.org/pods/SimplePDF)
+
 SimplePDF is a Swift class that lets you create simple PDF documents with page numbers and table of contents. The code is a rough implementation of [Builder](https://en.wikipedia.org/wiki/Builder_pattern) design pattern. See the demo project for usage example.
+
+## Usage
+
+To run the example project, clone the repo, and run `pod install` from the Example directory first. Or run `pod try SimplePDF`.
+
+## Requirements
+
+As of this writing, SimplePDF is in Swift 2.1. Therefore you need Xcode 7.2.1 for development. You can target iOS 8.0 and later.
+
+
+## Installation
+
+SimplePDF is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod "SimplePDF"
+```
 
 ### Features
 Although SimplePDF can only generate simple PDF documents, It can be used in a variety of use cases. It allows you to add:
@@ -12,13 +36,12 @@ Although SimplePDF can only generate simple PDF documents, It can be used in a v
 
 In addition to predefined headings and body text formats, you can also add any `NSAttributedString` to the pdf, however it will not be included in Table of Contents. Table of Contents only takes into account the content added through `addH1` ... `addH6` functions.
 
-### Supported iOS & SDK Version
-As of this writing, SimplePDF is in Swift 2.1. Therefore you need Xcode 7.2.1 for development. You can probably target iOS 8.0 and later.
-
 ## Getting Started
-Copy the files in _SimplePDF_ directory to your project (note to self: need to make it a pod) and start using it. Here's what typical usage would look like:
+After installation from CocoaPods, import the module with `import SimplePDF`. Here's what typical usage would look like:
 
 ```swift
+import SimplePDF
+
 // Initialize
 let pdf = SimplePDF(pdfTitle: "Simple PDF Demo", authorName: "Muhammad Ishaq")
 
@@ -139,27 +162,11 @@ SimplePDF will now use your subclass instead of `DefaultTextFormatter` to format
 * `addImages(imagePaths:[String], imageCaptions: [String], imagesPerRow:Int = 3)` adds images to pdf. It resizes the images uniformly to fit `imagesPerRow` images in available page width. Passing nil for image (and empty string for caption) keeps corresponding column empty.
 * `addImagesRow(imagePaths: [String], imageCaptions: [NSAttributedString], columnWidths: [CGFloat])` adds a single row of images using column widths specified. Passing nil for image (and empty string for caption) keeps corresponding column empty.
 
+## Author
+
+Muhammad Ishaq, ishaq@involution.co
+
 ## License
-```
-The MIT License (MIT)
 
-Copyright (c) 2015 Muhammad Ishaq
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+SimplePDF is available under the MIT license. See the LICENSE file for more info.
+/Users/ishaq/Projects/github/test/SimplePDF/README.md

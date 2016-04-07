@@ -1063,6 +1063,12 @@ public class SimplePDF {
         var type = HeaderFooterType.Header
         var pageRange = NSMakeRange(0, 0)
         var attributedString: NSAttributedString
+        
+        public init(type: HeaderFooterType, pageRange: NSRange, attributedString: NSAttributedString) {
+            self.type = type
+            self.pageRange = pageRange
+            self.attributedString = attributedString
+        }
     }
     
     // MARK: - HeaderFooterImage
@@ -1073,6 +1079,15 @@ public class SimplePDF {
         var image: UIImage?
         var imageHeight: CGFloat
         var alignment =  NSTextAlignment.Left
+        
+        public init(type: HeaderFooterType, pageRange: NSRange, imagePath: String, image: UIImage?, imageHeight: CGFloat, alignment: NSTextAlignment = .Left) {
+            self.type = type
+            self.pageRange = pageRange
+            self.imagePath = imagePath
+            self.image = image
+            self.imageHeight = imageHeight
+            self.alignment = alignment
+        }
     }
     
     // MARK: - SimplePDF vars
@@ -1128,7 +1143,7 @@ public class SimplePDF {
     }*/
 
     // MARK: - SimplePDF methods
-    init(pdfTitle: String, authorName: String, pageSize: PageSize = .A4, pageOrientation: PageOrientation = .Portrait,
+    public init(pdfTitle: String, authorName: String, pageSize: PageSize = .A4, pageOrientation: PageOrientation = .Portrait,
         leftMargin:CGFloat = 36, rightMargin:CGFloat = 36, topMargin: CGFloat = 72, bottomMargin: CGFloat = 36, textFormatter: DefaultTextFormatter = DefaultTextFormatter()) {
             
             self.leftMargin = leftMargin

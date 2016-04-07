@@ -1,9 +1,9 @@
 //
 //  AppDelegate.swift
-//  SimplePDFDemo
+//  SimplePDF
 //
-//  Created by Muhammad Ishaq on 29/03/2015.
-//  Copyright (c) 2015 Kahaf. All rights reserved.
+//  Created by Muhammad Ishaq on 04/07/2016.
+//  Copyright (c) 2016 Muhammad Ishaq. All rights reserved.
 //
 
 import UIKit
