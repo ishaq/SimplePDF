@@ -1,4 +1,4 @@
-# SimplePDF
+# SimplePDFSwift
 
 <!-- [![CI Status](http://img.shields.io/travis/Muhammad Ishaq/SimplePDF.svg?style=flat)](https://travis-ci.org/Muhammad Ishaq/SimplePDF) -->
 [![Version](https://img.shields.io/cocoapods/v/SimplePDFSwift.svg?style=flat)](http://cocoapods.org/pods/SimplePDF)
@@ -9,7 +9,9 @@ SimplePDF is a Swift class that lets you create simple PDF documents with page n
 
 ## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first. Or run `pod try SimplePDF`.
+To run the example project, clone the repo, and run `pod install` from the Example directory first. Or run `pod try SimplePDFSwift`.
+
+** NOTE:** Pod for this library is called `SimplePDFSwift`, Please note that pod named `SimplePDF` is a different library.
 
 ## Requirements
 
@@ -22,7 +24,7 @@ SimplePDF is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod "SimplePDF"
+pod "SimplePDFSwift"
 ```
 
 ### Features
@@ -37,10 +39,10 @@ Although SimplePDF can only generate simple PDF documents, It can be used in a v
 In addition to predefined headings and body text formats, you can also add any `NSAttributedString` to the pdf, however it will not be included in Table of Contents. Table of Contents only takes into account the content added through `addH1` ... `addH6` functions.
 
 ## Getting Started
-After installation from CocoaPods, import the module with `import SimplePDF`. Here's what typical usage would look like:
+After installation from CocoaPods, import the module with `import SimplePDFSwift`. Here's what typical usage would look like:
 
 ```swift
-import SimplePDF
+import SimplePDFSwift
 
 // Initialize
 let pdf = SimplePDF(pdfTitle: "Simple PDF Demo", authorName: "Muhammad Ishaq")

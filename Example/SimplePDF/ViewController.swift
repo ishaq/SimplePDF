@@ -7,8 +7,7 @@
 //
 
 import UIKit
-import SimplePDF
-
+import SimplePDFSwift
 
 class ViewController: UIViewController, UIDocumentInteractionControllerDelegate {
 
