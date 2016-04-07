@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = "SimplePDF"
+  s.name             = "SimplePDFSwift"
   s.version          = "0.1.0"
   s.summary          = "A Swift class to help generate simple PDF documents with page numbers and Table of Contents."
 
