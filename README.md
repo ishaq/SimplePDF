@@ -169,4 +169,3 @@ Muhammad Ishaq, ishaq@involution.co
 ## License
 
 SimplePDF is available under the MIT license. See the LICENSE file for more info.
-/Users/ishaq/Projects/github/test/SimplePDF/README.md
