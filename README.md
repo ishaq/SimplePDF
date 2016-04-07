@@ -1,9 +1,9 @@
 # SimplePDF
 
 <!-- [![CI Status](http://img.shields.io/travis/Muhammad Ishaq/SimplePDF.svg?style=flat)](https://travis-ci.org/Muhammad Ishaq/SimplePDF) -->
-[![Version](https://img.shields.io/cocoapods/v/SimplePDF.svg?style=flat)](http://cocoapods.org/pods/SimplePDF)
-[![License](https://img.shields.io/cocoapods/l/SimplePDF.svg?style=flat)](http://cocoapods.org/pods/SimplePDF)
-[![Platform](https://img.shields.io/cocoapods/p/SimplePDF.svg?style=flat)](http://cocoapods.org/pods/SimplePDF)
+[![Version](https://img.shields.io/cocoapods/v/SimplePDFSwift.svg?style=flat)](http://cocoapods.org/pods/SimplePDF)
+[![License](https://img.shields.io/cocoapods/l/SimplePDFSwift.svg?style=flat)](http://cocoapods.org/pods/SimplePDF)
+[![Platform](https://img.shields.io/cocoapods/p/SimplePDFSwift.svg?style=flat)](http://cocoapods.org/pods/SimplePDF)
 
 SimplePDF is a Swift class that lets you create simple PDF documents with page numbers and table of contents. The code is a rough implementation of [Builder](https://en.wikipedia.org/wiki/Builder_pattern) design pattern. See the demo project for usage example.
 
