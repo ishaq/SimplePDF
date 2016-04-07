@@ -48,7 +48,7 @@
 		7BD232A005712A4E82F92522 /* Pods-SimplePDF_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimplePDF_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SimplePDF_Tests/Pods-SimplePDF_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A14CEA4A2EA1824A89C8BCB6 /* Pods_SimplePDF_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimplePDF_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9B283E6D37BA62FBC5255C7 /* Pods-SimplePDF_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimplePDF_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SimplePDF_Tests/Pods-SimplePDF_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		E3ACCBF4822A73427213F8A9 /* SimplePDF.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SimplePDF.podspec; path = ../SimplePDF.podspec; sourceTree = "<group>"; };
+		E3ACCBF4822A73427213F8A9 /* SimplePDFSwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SimplePDFSwift.podspec; path = ../SimplePDFSwift.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,7 +135,7 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				E3ACCBF4822A73427213F8A9 /* SimplePDF.podspec */,
+				E3ACCBF4822A73427213F8A9 /* SimplePDFSwift.podspec */,
 				1AC8B89E3D73A8D2544B9387 /* README.md */,
 				3BB44BCB67803C6A1698D498 /* LICENSE */,
 			);
