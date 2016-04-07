@@ -11,7 +11,7 @@ SimplePDF is a Swift class that lets you create simple PDF documents with page n
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first. Or run `pod try SimplePDFSwift`.
 
-**NOTE:** Pod for this library is called `SimplePDFSwift`, Please note that pod named `SimplePDF` is a different library.
+**NOTE: Pod for this library is called `SimplePDFSwift`, Please note that pod named `SimplePDF` is a different library.**
 
 ## Requirements
 
