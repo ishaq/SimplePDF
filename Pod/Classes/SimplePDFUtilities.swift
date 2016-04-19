@@ -49,7 +49,7 @@ class SimplePDFUtilities {
         var postfix = 0
         var newPath = path
         while(fileManager.fileExistsAtPath(newPath as String)) {
-            postfix++
+            postfix += 1
             
             let pathExtension = path.pathExtension
             newPath = path.stringByDeletingPathExtension
