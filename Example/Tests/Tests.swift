@@ -2,7 +2,7 @@
 
 import Quick
 import Nimble
-import SimplePDF
+import SimplePDFSwift
 
 class TableOfContentsSpec: QuickSpec {
     override func spec() {

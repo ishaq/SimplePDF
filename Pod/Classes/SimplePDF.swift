@@ -84,7 +84,7 @@ public class SimplePDF {
                 case .startNewPage:
                     pageRange = pdf.startNewPage(calculationOnly)
                 case .addImages(let imagePaths, let imageCaptions, let imagesPerRow, let spacing, let padding):
-                    pageRange = pdf.addImages(imagePaths, imageCaptions: imageCaptions, imagesPerRow: imagesPerRow, spacing: spacing, padding: padding, calculationOnly: calculationOnly)
+                    pageRange = pdf.addImages(imagePaths: imagePaths, imageCaptions: imageCaptions, imagesPerRow: imagesPerRow, spacing: spacing, padding: padding, calculationOnly: calculationOnly)
                 case .addImagesRow(let imagePaths, let imageCaptions, let columnWidths, let spacing, let padding, let captionBackgroundColor, let imageBackgroundColor):
                     pageRange = pdf.addImagesRow(imagePaths, imageCaptions: imageCaptions, columnWidths: columnWidths, spacing: spacing, padding: padding, captionBackgroundColor: captionBackgroundColor, imageBackgroundColor: imageBackgroundColor, calculationOnly: calculationOnly)
                 case .addAttributedStringsToColumns(let columnWidths, let strings, let horizontalPadding, let allowSplitting, let backgroundColor):
@@ -158,7 +158,7 @@ public class SimplePDF {
             var tableOfContents = Array<TableOfContentsElement>()
             
             var pageIndex = -1
-            for (var i = 0; i < document.count; i++) {
+            for i in 0 ..< document.count {
                 let docNode = document[i]
                 pageIndex += docNode.pageRange.location
                 
@@ -326,7 +326,7 @@ public class SimplePDF {
             if(calculationOnly == false) {
                 UIGraphicsBeginPDFPage()
             }
-            currentPage++
+            currentPage += 1
             currentLocation = CGPointZero
             if(calculationOnly == false) {
                 addPageHeaderFooter()
@@ -347,7 +347,7 @@ public class SimplePDF {
             drawLine(CGPointMake(availablePageRect.origin.x, availablePageRect.origin.y + availablePageRect.size.height + 1),
                 p2: CGPointMake(availablePageRect.origin.x + availablePageRect.size.width, availablePageRect.origin.y + availablePageRect.size.height + 1))
             
-            for var i = 0; i < self.headerFooterTexts.count; i++ {
+            for i in 0 ..< self.headerFooterTexts.count {
                 var text = self.headerFooterTexts[i]
                 let textString = NSMutableAttributedString(attributedString: text.attributedString)
                 textString.mutableString.replaceOccurrencesOfString(kPageNumberPlaceholder, withString: "\(currentPage + 1)", options: [], range: NSMakeRange(0, textString.length))
@@ -363,7 +363,7 @@ public class SimplePDF {
                 }
             }
             
-            for var i = 0; i < self.headerFooterImages.count; i++ {
+            for i in 0 ..< self.headerFooterImages.count {
                 let image = self.headerFooterImages[i]
                 if(image.imagePath.isEmpty && image.image == nil) {
                     print("ERROR: image path is empty and image is null, skipping")
@@ -407,7 +407,8 @@ public class SimplePDF {
             
         }
         
-        private func drawHeaderFooterText(framesetter: CTFramesetterRef, var textRect: CGRect) {
+        private func drawHeaderFooterText(framesetter: CTFramesetterRef, textRect textRectIn: CGRect) {
+            var textRect = textRectIn
             textRect = convertRectToCoreTextCoordinates(textRect)
             
             let context = UIGraphicsGetCurrentContext()
@@ -485,27 +486,21 @@ public class SimplePDF {
         }
         
         // MARK: - Document elements
-        private func addH1(string: String, var backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
+        private func addH1(string: String, backgroundBoxColor backgroundBoxColorIn: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
             let attrString = textFormatter.attributedStringForStyle(string, style: .H1)
-            if(backgroundBoxColor == nil) {
-                backgroundBoxColor = kDefaultBackgroundBoxColor
-            }
+            let backgroundBoxColor = backgroundBoxColorIn ?? kDefaultBackgroundBoxColor
             return addAttributedString(attrString, allowSplitting: false, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
         }
         
-        private func addH2(string: String, var backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
+        private func addH2(string: String, backgroundBoxColor backgroundBoxColorIn: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
+            let backgroundBoxColor = backgroundBoxColorIn ?? kDefaultBackgroundBoxColor
             let attrString = textFormatter.attributedStringForStyle(string, style: .H2)
-            if(backgroundBoxColor == nil) {
-                backgroundBoxColor = kDefaultBackgroundBoxColor
-            }
             return addAttributedString(attrString, allowSplitting: false, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
         }
         
-        private func addH3(string: String, var backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
+        private func addH3(string: String, backgroundBoxColor backgroundBoxColorIn: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
             let attrString = textFormatter.attributedStringForStyle(string, style: .H3)
-            if(backgroundBoxColor == nil) {
-                backgroundBoxColor = kDefaultBackgroundBoxColor
-            }
+            let backgroundBoxColor = backgroundBoxColorIn ?? kDefaultBackgroundBoxColor
             return addAttributedString(attrString, allowSplitting: false, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
         }
         private func addH4(string: String, backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
@@ -527,19 +522,20 @@ public class SimplePDF {
             
         }
         
-        private func addImages(var imagePaths:[String], imageCaptions: [String], imagesPerRow:Int = 3, spacing:CGFloat = 2, padding:CGFloat = 5, calculationOnly: Bool = false) -> NSRange {
+        private func addImages(imagePaths imagePathsIn:[String], imageCaptions: [String], imagesPerRow:Int = 3, spacing:CGFloat = 2, padding:CGFloat = 5, calculationOnly: Bool = false) -> NSRange {
+            var imagePaths = imagePathsIn
             assert(imagePaths.count == imageCaptions.count, "image paths and image captions don't have same number of elements")
             
             var funcCallRange = NSMakeRange(0, 0)
             
             var columnWidths = Array<CGFloat>()
             let singleColumnWidth = availablePageRect.size.width / CGFloat(imagesPerRow)
-            for var i = 0; i < imagesPerRow; i++ {
+            for _ in 0 ..< imagesPerRow {
                 columnWidths.append(singleColumnWidth)
             }
             
             var attributedImageCaptions = Array<NSAttributedString>()
-            for var i = 0; i < imageCaptions.count; i++ {
+            for i in 0 ..< imageCaptions.count {
                 let mutableCaption = NSMutableAttributedString(attributedString: textFormatter.attributedStringForStyle(imageCaptions[i], style: .H6))
                 /* this doesn't work since captions are drawn using CTLine
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -568,7 +564,7 @@ public class SimplePDF {
                 else {
                     funcCallRange.length += (thisRange.location + thisRange.length)
                 }
-                rowIndex++
+                rowIndex += 1
                 
             } while(imagePaths.count > 0)
             return funcCallRange
@@ -583,7 +579,7 @@ public class SimplePDF {
                 var funcCallRange = NSMakeRange(0, 0)
                 
                 var imageProperties = Array<NSDictionary>()
-                for var i = 0; i < imagePaths.count; i++ {
+                for i in 0 ..< imagePaths.count {
                     if(imagePaths[i].isEmpty) {
                         imageProperties.append(NSDictionary())
                         continue
@@ -593,7 +589,7 @@ public class SimplePDF {
                 }
                 
                 var maxLineHeight:CGFloat = 0
-                for var i = 0; i < imageCaptions.count; i++ {
+                for i in 0 ..< imageCaptions.count {
                     let thisCaption = imageCaptions[i]
                     if(thisCaption.length == 0) {
                         continue
@@ -607,7 +603,7 @@ public class SimplePDF {
                 }
                 
                 // start a new page if needed
-                for var i = 0; i < imagePaths.count; i++ {
+                for i in 0 ..< imagePaths.count {
                     let thisWidth = columnWidths[i] - (2 * padding)
                     let availableSpace = CGSize(width: CGFloat.max, height: availablePageRect.size.height - currentLocation.y)
                     
@@ -631,7 +627,7 @@ public class SimplePDF {
                 currentLocation.y += padding
                 var maxHeightRendered: CGFloat = 0
                 var loc = currentLocation
-                for var i = 0; i < imagePaths.count; i++ {
+                for i in 0 ..< imagePaths.count {
                     // render the label
                     var currentY = loc.y
                     let thisCaption = imageCaptions[i]
@@ -736,7 +732,7 @@ public class SimplePDF {
             
             var ranges = Array<CFRange>() // tracks range for each column
             var framesetters = Array<CTFramesetterRef>() // tracks framsetter for each column
-            for(var i = 0; i < strings.count; i++) {
+            for i in 0 ..< strings.count {
                 ranges.append(CFRangeMake(0, 0))
                 framesetters.append(CTFramesetterCreateWithAttributedString(strings[i]))
             }
@@ -750,7 +746,7 @@ public class SimplePDF {
                 // decide if we start start a new page
                 if(allowSplitting == false) {
                     var allStringsFitOnThisPage = true
-                    for var i = 0; i < ranges.count; i++ {
+                    for i in 0 ..< ranges.count {
                         let thisWidth = columnWidths[i]
                         let thisString = strings[i]
                         
@@ -764,7 +760,7 @@ public class SimplePDF {
                     
                     if(allStringsFitOnThisPage == false) {
                         var allStringsFitOnANewPage = true
-                        for var i = 0; i < ranges.count; i++ {
+                        for i in 0 ..< ranges.count {
                             let thisWidth = columnWidths[i]
                             let thisString = strings[i]
                             
@@ -789,7 +785,7 @@ public class SimplePDF {
                 var loc = currentLocation
                 var maxHeightRendered:CGFloat = 0
                 
-                for var i = 0; i < columnWidths.count; i++ {
+                for i in 0 ..< columnWidths.count {
                     var thisRange = ranges[i]
                     let thisFramesetter = framesetters[i]
                     let thisWidth = columnWidths[i]
@@ -861,7 +857,7 @@ public class SimplePDF {
                 var shouldAddNewPage = false
                 
                 done = true
-                for var i = 0; i < ranges.count; i++ {
+                for i in 0 ..< ranges.count {
                     let thisRange = ranges[i]
                     let thisString = strings[i]
                     if thisRange.location < thisString.length {
@@ -923,7 +919,7 @@ public class SimplePDF {
             
             let headingRange = addH3("Table of Contents", backgroundBoxColor: nil, calculationOnly: calculationOnly)
             funcRange.length += (headingRange.location + headingRange.length)
-            for (var i = 0; i < document.tableOfContents.count; i++) {
+            for i in 0 ..< document.tableOfContents.count {
                 let tocNode = document.tableOfContents[i]
                 
                 // NOTE: on very first call to this function, page numbers would not be correct in table of contents because we don't know
@@ -954,23 +950,19 @@ public class SimplePDF {
         
         
         // MARK: - Drawing
-        private func drawRect(rect: CGRect, var fillColor: UIColor? = nil) {
-            if(fillColor == nil) {
-                fillColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
-            }
+        private func drawRect(rect: CGRect, fillColor fillColorIn: UIColor? = nil) {
+            let fillColor = fillColorIn ?? UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
             let context = UIGraphicsGetCurrentContext()
             CGContextSetRGBStrokeColor(context, 0, 0, 0, 1)
-            CGContextSetFillColorWithColor(context, fillColor!.CGColor)
+            CGContextSetFillColorWithColor(context, fillColor.CGColor)
             CGContextFillRect(context, rect)
             //CGContextStrokeRect(context, rect)
         }
         
-        private func drawLine(p1: CGPoint, p2:CGPoint, var color: UIColor? = nil, strokeWidth: CGFloat = 1) {
-            if(color == nil) {
-                color = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
-            }
+        private func drawLine(p1: CGPoint, p2:CGPoint, color colorIn: UIColor? = nil, strokeWidth: CGFloat = 1) {
+            let color = colorIn ?? UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
             let context = UIGraphicsGetCurrentContext()
-            CGContextSetStrokeColorWithColor(context, color!.CGColor);
+            CGContextSetStrokeColorWithColor(context, color.CGColor);
             CGContextSetLineWidth(context, strokeWidth);
             CGContextMoveToPoint(context, p1.x, p1.y);
             CGContextAddLineToPoint(context, p2.x, p2.y);
@@ -993,13 +985,15 @@ public class SimplePDF {
             return true
         }
         
-        private func convertRectToCoreTextCoordinates(var r: CGRect) -> CGRect {
+        private func convertRectToCoreTextCoordinates(rectIn: CGRect) -> CGRect {
+            var r = rectIn
             let bounds = getPageBounds()
             r.origin.y = bounds.size.height - (r.size.height + r.origin.y)
             return r
         }
         
-        private func convertPointToCoreTextCoordinates(var p: CGPoint) -> CGPoint {
+        private func convertPointToCoreTextCoordinates(pointIn: CGPoint) -> CGPoint {
+            var p = pointIn
             let bounds = getPageBounds()
             p.y = bounds.size.height - p.y
             return p
@@ -1183,7 +1177,7 @@ public class SimplePDF {
         // Start with a clean slate
         self.pdfWriter = initializePDFWriter(0)
         var pageIndex = -1
-        for (var i = 0; i < document.document.count; i++) {
+        for i in 0 ..< document.document.count {
             let docElement = document.document[i]
             // page number is: let pageNumber = pageIndex + docElement.pageRange.location
             docElement.executeFunctionCall(pdfWriter, calculationOnly: true)
@@ -1196,7 +1190,7 @@ public class SimplePDF {
         pdfWriter.openPDF(pdfFilePath, title: pdfTitle, author: authorName)
         pageIndex = -1
         
-        for (var i = 0; i < document.document.count; i++) {
+        for i in 0 ..< document.document.count {
             let docElement = document.document[i]
             // page number is: let pageNumber = pageIndex + docElement.pageRange.location
             docElement.executeFunctionCall(pdfWriter, calculationOnly: false)
@@ -1219,7 +1213,7 @@ public class SimplePDF {
         document.tableOfContents = document.generateTableOfContents()
         var tocInserted = false
         var pageIndex = -1
-        for (var i = 0; i < document.document.count; i++) {
+        for i in 0 ..< document.document.count {
             let docElement = document.document[i]
             let pageNumber = pageIndex + docElement.pageRange.location
             // if (location == 1 && pageNumber == document.tableOfContentsOnPage) || (location == 0 && pageNumber > document.tableOfContents) {
@@ -1251,7 +1245,7 @@ public class SimplePDF {
         tocInserted = false
         pageIndex = -1
         
-        for (var i = 0; i < document.document.count; i++) {
+        for i in 0 ..< document.document.count {
             let docElement = document.document[i]
             let pageNumber = pageIndex + docElement.pageRange.location
             if(pageNumber >= document.tableOfContentsOnPage && tocInserted == false) {
@@ -1342,7 +1336,7 @@ public class SimplePDF {
     }
     
     public func addImages(imagePaths:[String], imageCaptions: [String], imagesPerRow:Int = 3, spacing:CGFloat = 2, padding:CGFloat = 5) -> NSRange {
-        let range = pdfWriter.addImages(imagePaths, imageCaptions: imageCaptions, imagesPerRow: imagesPerRow, spacing: spacing, padding: padding, calculationOnly: true)
+        let range = pdfWriter.addImages(imagePaths: imagePaths, imageCaptions: imageCaptions, imagesPerRow: imagesPerRow, spacing: spacing, padding: padding, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addImages(imagePaths: imagePaths, imageCaptions: imageCaptions, imagesPerRow: imagesPerRow, spacing: spacing, padding: padding)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
         document.document.append(docNode)
