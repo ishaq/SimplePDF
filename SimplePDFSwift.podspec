@@ -8,14 +8,14 @@
 
 Pod::Spec.new do |s|
   s.name             = "SimplePDFSwift"
-  s.version          = "0.1.1"
+  s.version          = "0.1.2"
   s.summary          = "A Swift class to help generate simple PDF documents with page numbers and Table of Contents."
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
 #   * Try to keep it short, snappy and to the point.
 #   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!  
+#   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description      = <<-DESC
 SimplePDF is a Swift class to create PDF documents with page numbers and table of contents. SimplePDF generated document may have:
 
