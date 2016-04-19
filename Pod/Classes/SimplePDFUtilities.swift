@@ -9,14 +9,19 @@ import ImageIO
 import UIKit
 
 class SimplePDFUtilities {
+    
+    class func getApplicationInfoDictionary() -> Dictionary<NSObject, AnyObject> {
+        let infoDictionary = NSMutableDictionary()
+        infoDictionary.addEntriesFromDictionary(NSBundle.mainBundle().infoDictionary!)
+        if let localizedInfoDictionary = NSBundle.mainBundle().localizedInfoDictionary {
+            infoDictionary.addEntriesFromDictionary(localizedInfoDictionary)
+        }
+        return infoDictionary as Dictionary<NSObject, AnyObject>
+    }
+    
     class func getApplicationVersion() -> String {
-        var dictionary: Dictionary<NSObject, AnyObject>!
-        if (NSBundle.mainBundle().localizedInfoDictionary != nil) {
-            dictionary = NSBundle.mainBundle().localizedInfoDictionary! as Dictionary
-        }
-        else {
-            dictionary = NSBundle.mainBundle().infoDictionary!
-        }
+        let dictionary = getApplicationInfoDictionary()
+
         let build = dictionary["CFBundleVersion"] as? String
         let shortVersionString = dictionary["CFBundleShortVersionString"] as? String
         
@@ -24,13 +29,8 @@ class SimplePDFUtilities {
     }
     
     class func getApplicationName() -> String {
-        var dictionary: Dictionary<NSObject, AnyObject>!
-        if (NSBundle.mainBundle().localizedInfoDictionary != nil) {
-            dictionary = NSBundle.mainBundle().localizedInfoDictionary! as Dictionary
-        }
-        else {
-            dictionary = NSBundle.mainBundle().infoDictionary!
-        }
+        let dictionary = getApplicationInfoDictionary()
+        
         let name = dictionary["CFBundleName"] as! NSString
         
         return name as String
