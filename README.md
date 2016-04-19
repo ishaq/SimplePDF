@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/ishaq/SimplePDF.png?label=ready&title=Ready)](https://waffle.io/ishaq/SimplePDF)
 # SimplePDF
 
 <!-- [![CI Status](http://img.shields.io/travis/Muhammad Ishaq/SimplePDF.svg?style=flat)](https://travis-ci.org/Muhammad Ishaq/SimplePDF) -->
