@@ -14,6 +14,12 @@ import CoreText
 *  Generate Simple Documents with Images. TOC gets generated and put at (roughly) specified page index
 */
 public class SimplePDF {
+
+    public static let defaultBackgroundBoxColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
+    public static let defaultSpacing:CGFloat = 8
+    public static let pageNumberPlaceholder = "{{PAGE_NUMBER}}"
+    public static let pagesCountPlaceholder = "{{PAGES_COUNT}}"
+
     // MARK: - Document Structure
     private class DocumentStructure {
         // MARK: - FunctionCall (sort of a "Command" pattern)
@@ -68,17 +74,17 @@ public class SimplePDF {
                 var pageRange = NSMakeRange(0, 0)
                 switch(self) {
                 case .addH1(let string, let backgroundBoxColor):
-                    pageRange = pdf.addH1(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
+                    pageRange = pdf.addHeadline(string, style: .H1, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
                 case .addH2(let string, let backgroundBoxColor):
-                    pageRange = pdf.addH2(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
+                    pageRange = pdf.addHeadline(string, style: .H2, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
                 case .addH3(let string, let backgroundBoxColor):
-                    pageRange = pdf.addH3(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
+                    pageRange = pdf.addHeadline(string, style: .H3, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
                 case .addH4(let string, let backgroundBoxColor):
-                    pageRange = pdf.addH4(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
+                    pageRange = pdf.addHeadline(string, style: .H4, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
                 case .addH5(let string, let backgroundBoxColor):
-                    pageRange = pdf.addH5(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
+                    pageRange = pdf.addHeadline(string, style: .H5, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
                 case .addH6(let string, let backgroundBoxColor):
-                    pageRange = pdf.addH6(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
+                    pageRange = pdf.addHeadline(string, style: .H6, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
                 case .addBodyText(let string, let backgroundBoxColor):
                     pageRange = pdf.addBodyText(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
                 case .startNewPage:
@@ -213,7 +219,9 @@ public class SimplePDF {
     
     // MARK: - Text Formatter
     public class DefaultTextFormatter {
-        func attributedStringForStyle(string: String, style: TextStyle) -> NSAttributedString {
+        public init() { }
+        
+        public func attributedStringForStyle(string: String, style: TextStyle) -> NSAttributedString {
             let attrString = NSMutableAttributedString(string: string)
             
             let paragraphStyle = NSMutableParagraphStyle()
@@ -241,6 +249,15 @@ public class SimplePDF {
             return attrString
         }
         
+        public func backgroundColorForStyle(style: TextStyle) -> UIColor? {
+            switch style {
+            case .H1, .H2, .H3:
+                return defaultBackgroundBoxColor
+            default:
+                return nil
+            }
+        }
+        
     }
     
     // MARK: - PDFWriter
@@ -262,15 +279,9 @@ public class SimplePDF {
         var headerFooterTexts: Array<HeaderFooterText>
         var headerFooterImages: Array<HeaderFooterImage>
         
-        let kPageNumberPlaceholder: String
-        let kPagesCountPlaceholder: String
-        let kStandardSpacing: CGFloat
-        let kDefaultBackgroundBoxColor: UIColor
-        
         init(textFormatter: DefaultTextFormatter, pageSize: PageSize, pageOrientation: PageOrientation, leftMargin: CGFloat, rightMargin: CGFloat,
             topMargin: CGFloat, bottomMargin: CGFloat, pagesCount: Int, headerFooterTexts: Array<HeaderFooterText>,
-            headerFooterImages: Array<HeaderFooterImage>, kPageNumberPlaceholder: String, kPagesCountPlaceholder: String,
-            kStandardSpacing: CGFloat, kDefaultBackgroundBoxColor: UIColor) {
+            headerFooterImages: Array<HeaderFooterImage>) {
                 self.textFormatter = textFormatter
                 self.pageSize = pageSize
                 self.pageOrientation = pageOrientation
@@ -282,12 +293,7 @@ public class SimplePDF {
                 self.pagesCount = pagesCount
                 self.headerFooterImages = headerFooterImages
                 self.headerFooterTexts = headerFooterTexts
-                
-                self.kPageNumberPlaceholder = kPageNumberPlaceholder
-                self.kPagesCountPlaceholder = kPagesCountPlaceholder
-                self.kStandardSpacing = kStandardSpacing
-                self.kDefaultBackgroundBoxColor = kDefaultBackgroundBoxColor
-                
+            
                 let bounds = getPageBounds()
                 let origin = CGPoint(x: bounds.origin.x + leftMargin, y: bounds.origin.y + topMargin)
                 let size = CGSize(width: bounds.size.width - (leftMargin + rightMargin),
@@ -350,8 +356,8 @@ public class SimplePDF {
             for var i = 0; i < self.headerFooterTexts.count; i++ {
                 var text = self.headerFooterTexts[i]
                 let textString = NSMutableAttributedString(attributedString: text.attributedString)
-                textString.mutableString.replaceOccurrencesOfString(kPageNumberPlaceholder, withString: "\(currentPage + 1)", options: [], range: NSMakeRange(0, textString.length))
-                textString.mutableString.replaceOccurrencesOfString(kPagesCountPlaceholder, withString: "\(pagesCount)", options: [], range: NSMakeRange(0, textString.length))
+                textString.mutableString.replaceOccurrencesOfString(pageNumberPlaceholder, withString: "\(currentPage + 1)", options: [], range: NSMakeRange(0, textString.length))
+                textString.mutableString.replaceOccurrencesOfString(pagesCountPlaceholder, withString: "\(pagesCount)", options: [], range: NSMakeRange(0, textString.length))
                 text.attributedString = textString
                 if NSLocationInRange(currentPage, text.pageRange) {
                     switch(text.type) {
@@ -485,46 +491,25 @@ public class SimplePDF {
         }
         
         // MARK: - Document elements
-        private func addH1(string: String, var backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
-            let attrString = textFormatter.attributedStringForStyle(string, style: .H1)
-            if(backgroundBoxColor == nil) {
-                backgroundBoxColor = kDefaultBackgroundBoxColor
-            }
-            return addAttributedString(attrString, allowSplitting: false, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
-        }
         
-        private func addH2(string: String, var backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
-            let attrString = textFormatter.attributedStringForStyle(string, style: .H2)
-            if(backgroundBoxColor == nil) {
-                backgroundBoxColor = kDefaultBackgroundBoxColor
+        private func addHeadline(string: String, style: TextStyle, var backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
+            guard [TextStyle.H1, TextStyle.H2, TextStyle.H3, TextStyle.H4, TextStyle.H5, TextStyle.H6].contains(style) else {
+                fatalError("style must be a headline, but was: \(style)")
             }
-            return addAttributedString(attrString, allowSplitting: false, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
-        }
-        
-        private func addH3(string: String, var backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
-            let attrString = textFormatter.attributedStringForStyle(string, style: .H3)
-            if(backgroundBoxColor == nil) {
-                backgroundBoxColor = kDefaultBackgroundBoxColor
-            }
-            return addAttributedString(attrString, allowSplitting: false, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
-        }
-        private func addH4(string: String, backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
-            let attrString = textFormatter.attributedStringForStyle(string, style: .H4)
-            return addAttributedString(attrString, allowSplitting: false, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
-        }
-        private func addH5(string: String, backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
-            let attrString = textFormatter.attributedStringForStyle(string, style: .H5)
-            return addAttributedString(attrString, allowSplitting: false, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
-        }
-        
-        private func addH6(string: String, backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
-            let attrString = textFormatter.attributedStringForStyle(string, style: .H6)
-            return addAttributedString(attrString, allowSplitting: false, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
-        }
-        private func addBodyText(string: String, backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
-            let attrString = textFormatter.attributedStringForStyle(string, style: .BodyText)
-            return addAttributedString(attrString, allowSplitting: true, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
             
+            let attrString = textFormatter.attributedStringForStyle(string, style: style)
+            if(backgroundBoxColor == nil) {
+                backgroundBoxColor = textFormatter.backgroundColorForStyle(style)
+            }
+            return addAttributedString(attrString, allowSplitting: false, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
+        }
+
+        private func addBodyText(string: String, var backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
+            let attrString = textFormatter.attributedStringForStyle(string, style: .BodyText)
+            if(backgroundBoxColor == nil) {
+                backgroundBoxColor = textFormatter.backgroundColorForStyle(.BodyText)
+            }
+            return addAttributedString(attrString, allowSplitting: true, backgroundBoxColor: backgroundBoxColor, calculationOnly: calculationOnly)
         }
         
         private func addImages(var imagePaths:[String], imageCaptions: [String], imagesPerRow:Int = 3, spacing:CGFloat = 2, padding:CGFloat = 5, calculationOnly: Bool = false) -> NSRange {
@@ -560,7 +545,7 @@ public class SimplePDF {
                 imagePaths[0..<itemsToGet] = []
                 attributedImageCaptions[0..<itemsToGet] = []
                 
-                let thisRange = addImagesRow(rowImages, imageCaptions: rowCaptions, columnWidths: Array(columnWidths[0..<itemsToGet]), spacing: spacing, padding: padding, captionBackgroundColor: kDefaultBackgroundBoxColor, calculationOnly: calculationOnly)
+                let thisRange = addImagesRow(rowImages, imageCaptions: rowCaptions, columnWidths: Array(columnWidths[0..<itemsToGet]), spacing: spacing, padding: padding, captionBackgroundColor: defaultBackgroundBoxColor, calculationOnly: calculationOnly)
                 
                 if(rowIndex == 0) {
                     funcCallRange = thisRange
@@ -725,7 +710,7 @@ public class SimplePDF {
                     }
                 }
                 currentLocation.y += maxHeightRendered
-                currentLocation.y += kStandardSpacing
+                currentLocation.y += defaultSpacing
                 return funcCallRange
         }
         
@@ -877,7 +862,7 @@ public class SimplePDF {
                 }
                 else {
                     currentLocation.y += maxHeightRendered
-                    currentLocation.y += kStandardSpacing
+                    currentLocation.y += defaultSpacing
                 }
                 
             } while (!done)
@@ -921,7 +906,7 @@ public class SimplePDF {
                 startNewPage(calculationOnly)
             }
             
-            let headingRange = addH3("Table of Contents", backgroundBoxColor: nil, calculationOnly: calculationOnly)
+            let headingRange = addHeadline("Table of Contents", style: .H3, backgroundBoxColor: nil, calculationOnly: calculationOnly)
             funcRange.length += (headingRange.location + headingRange.length)
             for (var i = 0; i < document.tableOfContents.count; i++) {
                 let tocNode = document.tableOfContents[i]
@@ -1060,11 +1045,11 @@ public class SimplePDF {
     
     // MARK: - HeaderFooterText
     public struct HeaderFooterText {
-        var type = HeaderFooterType.Header
-        var pageRange = NSMakeRange(0, 0)
+        var type: HeaderFooterType
+        var pageRange: NSRange
         var attributedString: NSAttributedString
         
-        public init(type: HeaderFooterType, pageRange: NSRange, attributedString: NSAttributedString) {
+        public init(type: HeaderFooterType, pageRange: NSRange = NSMakeRange(0, Int.max), attributedString: NSAttributedString) {
             self.type = type
             self.pageRange = pageRange
             self.attributedString = attributedString
@@ -1073,14 +1058,14 @@ public class SimplePDF {
     
     // MARK: - HeaderFooterImage
     public struct HeaderFooterImage {
-        var type = HeaderFooterType.Header
-        var pageRange = NSMakeRange(0, 0)
-        var imagePath = ""
+        let type: HeaderFooterType
+        let pageRange: NSRange
+        var imagePath: String
         var image: UIImage?
         var imageHeight: CGFloat
-        var alignment =  NSTextAlignment.Left
+        var alignment:  NSTextAlignment
         
-        public init(type: HeaderFooterType, pageRange: NSRange, imagePath: String, image: UIImage?, imageHeight: CGFloat, alignment: NSTextAlignment = .Left) {
+        public init(type: HeaderFooterType, pageRange: NSRange = NSMakeRange(0, Int.max), imagePath: String = "", image: UIImage? = nil, imageHeight: CGFloat, alignment: NSTextAlignment = .Left) {
             self.type = type
             self.pageRange = pageRange
             self.imagePath = imagePath
@@ -1101,11 +1086,6 @@ public class SimplePDF {
     
     public var headerFooterTexts = Array<HeaderFooterText>()
     public var headerFooterImages = Array<HeaderFooterImage>()
-    
-    public let kPageNumberPlaceholder = "{{PAGE_NUMBER}}"
-    public let kPagesCountPlaceholder = "{{PAGES_COUNT}}"
-    public let kStandardSpacing:CGFloat = 8
-    public let kDefaultBackgroundBoxColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
 
     public var availablePageSize: CGSize {
         get { return pdfWriter.availablePageSize }
@@ -1163,18 +1143,14 @@ public class SimplePDF {
             self.pdfWriter = PDFWriter(textFormatter: textFormatter, pageSize: pageSize, pageOrientation: pageOrientation,
                 leftMargin: leftMargin, rightMargin: rightMargin, topMargin: topMargin, bottomMargin: bottomMargin,
                 pagesCount: 0,
-                headerFooterTexts: headerFooterTexts, headerFooterImages: headerFooterImages,
-                kPageNumberPlaceholder: kPageNumberPlaceholder, kPagesCountPlaceholder: kPagesCountPlaceholder,
-                kStandardSpacing: kStandardSpacing, kDefaultBackgroundBoxColor: kDefaultBackgroundBoxColor)
+                headerFooterTexts: headerFooterTexts, headerFooterImages: headerFooterImages)
     }
     
     private func initializePDFWriter(pagesCount: Int) -> PDFWriter {
         return PDFWriter(textFormatter: textFormatter, pageSize: pageSize, pageOrientation: pageOrientation,
             leftMargin: leftMargin, rightMargin: rightMargin, topMargin: topMargin, bottomMargin: bottomMargin,
             pagesCount: pagesCount,
-            headerFooterTexts: headerFooterTexts, headerFooterImages: headerFooterImages,
-            kPageNumberPlaceholder: kPageNumberPlaceholder, kPagesCountPlaceholder: kPagesCountPlaceholder,
-            kStandardSpacing: kStandardSpacing, kDefaultBackgroundBoxColor: kDefaultBackgroundBoxColor)
+            headerFooterTexts: headerFooterTexts, headerFooterImages: headerFooterImages)
     }
     
     public func writePDFWithoutTableOfContents() -> String {
@@ -1286,7 +1262,7 @@ public class SimplePDF {
     }
     
     public func addH1(string: String, backgroundBoxColor: UIColor? = nil) -> NSRange {
-        let range = pdfWriter.addH1(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
+        let range = pdfWriter.addHeadline(string, style: .H1, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addH1(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
         document.document.append(docNode)
@@ -1294,7 +1270,7 @@ public class SimplePDF {
     }
     
     public func addH2(string: String, backgroundBoxColor: UIColor? = nil) -> NSRange {
-        let range = pdfWriter.addH2(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
+        let range = pdfWriter.addHeadline(string, style: .H2, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addH2(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
         document.document.append(docNode)
@@ -1302,7 +1278,7 @@ public class SimplePDF {
     }
     
     public func addH3(string: String, backgroundBoxColor: UIColor? = nil) -> NSRange {
-        let range = pdfWriter.addH3(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
+        let range = pdfWriter.addHeadline(string, style: .H3, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addH3(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
         document.document.append(docNode)
@@ -1310,7 +1286,7 @@ public class SimplePDF {
     }
     
     public func addH4(string: String, backgroundBoxColor: UIColor? = nil) -> NSRange {
-        let range = pdfWriter.addH4(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
+        let range = pdfWriter.addHeadline(string, style: .H4, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addH4(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
         document.document.append(docNode)
@@ -1318,7 +1294,7 @@ public class SimplePDF {
     }
     
     public func addH5(string: String, backgroundBoxColor: UIColor? = nil) -> NSRange {
-        let range = pdfWriter.addH5(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
+        let range = pdfWriter.addHeadline(string, style: .H5, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addH5(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
         document.document.append(docNode)
@@ -1326,7 +1302,7 @@ public class SimplePDF {
     }
     
     public func addH6(string: String, backgroundBoxColor: UIColor? = nil) -> NSRange {
-        let range = pdfWriter.addH6(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
+        let range = pdfWriter.addHeadline(string, style: .H6, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addH6(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
         document.document.append(docNode)
@@ -1400,3 +1376,27 @@ public class SimplePDF {
         return range
     }
 }
+
+
+
+
+
+
+// MARK: - Backwards compatibility -
+extension SimplePDF {
+    @available(*, deprecated, message="use `SimplePDF.pageNumberPlaceholder` instead")
+    public var kPageNumberPlaceholder : String { get { return SimplePDF.pageNumberPlaceholder }}
+
+    @available(*, deprecated, message="use `SimplePDF.pagesCountPlaceholder` instead")
+    public var kPagesCountPlaceholder : String { get { return SimplePDF.pagesCountPlaceholder }}
+
+    @available(*, deprecated, message="use `SimplePDF.defaultSpacing` instead")
+    public var kStandardSpacing : CGFloat { get { return SimplePDF.defaultSpacing }}
+
+    @available(*, deprecated, message="use `SimplePDF.defaultBackgroundBoxColor` instead")
+    public var kDefaultBackgroundBoxColor : UIColor { get { return SimplePDF.defaultBackgroundBoxColor }}
+}
+
+
+
+
