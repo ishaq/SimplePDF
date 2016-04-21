@@ -1195,9 +1195,10 @@ public class SimplePDF {
         set { document.smallestHeadingToIncludeInTOC = newValue }
     }
     
-    private var pdfFilePath: String
-    private var authorName: String
-    private var pdfTitle: String
+    public let pdfFilePath: String
+    public let pdfFileName: String
+    public let authorName: String
+    public let pdfTitle: String
     
     private var document = DocumentStructure()
     private var pdfWriter: PDFWriter
@@ -1213,7 +1214,7 @@ public class SimplePDF {
     }*/
 
     // MARK: - SimplePDF methods
-    public init(pdfTitle: String, authorName: String, pageSize: PageSize = .A4, pageOrientation: PageOrientation = .Portrait,
+    public init(pdfTitle: String, authorName: String, fileName : String = "SimplePDF.pdf", pageSize: PageSize = .A4, pageOrientation: PageOrientation = .Portrait,
         leftMargin:CGFloat = 36, rightMargin:CGFloat = 36, topMargin: CGFloat = 72, bottomMargin: CGFloat = 36, textFormatter: DefaultTextFormatter = DefaultTextFormatter()) {
             
             self.leftMargin = leftMargin
@@ -1226,8 +1227,9 @@ public class SimplePDF {
             
             self.authorName = authorName
             self.pdfTitle = pdfTitle
-            
-            let tmpFilePath = SimplePDFUtilities.pathForTmpFile("SimplePDF.pdf")
+        
+            self.pdfFileName = fileName
+            let tmpFilePath = SimplePDFUtilities.pathForTmpFile(pdfFileName)
             self.pdfFilePath = SimplePDFUtilities.renameFilePathToPreventNameCollissions(tmpFilePath)
             
             self.pdfWriter = PDFWriter(textFormatter: textFormatter, pageSize: pageSize, pageOrientation: pageOrientation,
