@@ -35,7 +35,7 @@ public class SimplePDF {
             case addImages(imagePaths:[String], imageCaptions: [String], imagesPerRow:Int, spacing:CGFloat, padding:CGFloat)
             case addImagesRow(imagePaths: [String], imageCaptions: [NSAttributedString], columnWidths: [CGFloat],
                 spacing: CGFloat, padding: CGFloat, captionBackgroundColor: UIColor?, imageBackgroundColor: UIColor?)
-            case addAttributedStringsToColumns(columnWidths: [CGFloat], strings: [NSAttributedString], horizontalPadding: CGFloat, allowSplitting: Bool, backgroundColor: UIColor?)
+            case addAttributedStringsToColumns(columnWidths: [CGFloat], strings: [NSAttributedString], horizontalPadding: CGFloat, allowSplitting: Bool, backgroundColor: UIColor?, withVerticalDividerLine : Bool)
             case addView(view: UIView)
             
             var description: String {
@@ -114,8 +114,8 @@ public class SimplePDF {
                     pageRange = pdf.addImages(imagePaths, imageCaptions: imageCaptions, imagesPerRow: imagesPerRow, spacing: spacing, padding: padding, calculationOnly: calculationOnly)
                 case .addImagesRow(let imagePaths, let imageCaptions, let columnWidths, let spacing, let padding, let captionBackgroundColor, let imageBackgroundColor):
                     pageRange = pdf.addImagesRow(imagePaths, imageCaptions: imageCaptions, columnWidths: columnWidths, spacing: spacing, padding: padding, captionBackgroundColor: captionBackgroundColor, imageBackgroundColor: imageBackgroundColor, calculationOnly: calculationOnly)
-                case .addAttributedStringsToColumns(let columnWidths, let strings, let horizontalPadding, let allowSplitting, let backgroundColor):
-                    pageRange = pdf.addAttributedStringsToColumns(columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor, calculationOnly: calculationOnly)
+                case .addAttributedStringsToColumns(let columnWidths, let strings, let horizontalPadding, let allowSplitting, let backgroundColor, let withVerticalDividerLine):
+                    pageRange = pdf.addAttributedStringsToColumns(columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor, calculationOnly: calculationOnly, withVerticalDividerLine: withVerticalDividerLine)
                 case .addView(let view):
                     pageRange = pdf.addView(view, calculationOnly: calculationOnly)
                 }
@@ -734,7 +734,7 @@ public class SimplePDF {
                 return funcCallRange
         }
         
-        private func addAttributedStringsToColumns(columnWidths: [CGFloat], strings: [NSAttributedString], horizontalPadding: CGFloat = 5, allowSplitting: Bool = true, backgroundColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
+        private func addAttributedStringsToColumns(columnWidths: [CGFloat], strings: [NSAttributedString], horizontalPadding: CGFloat = 5, allowSplitting: Bool = true, backgroundColor: UIColor? = nil, calculationOnly: Bool = false, withVerticalDividerLine: Bool = false) -> NSRange {
             assert(columnWidths.count == strings.count, "columnWidths and strings array don't have same number of elements")
             
             var funcCallRange = NSMakeRange(0, 0)
@@ -820,6 +820,11 @@ public class SimplePDF {
                         if(backgroundColor != nil) {
                             let boxRect = CGRect(x: originalTextRect.origin.x, y: originalTextRect.origin.y, width: availableSpace.width, height: suggestedSize.height)
                             drawRect(boxRect, fillColor: backgroundColor)
+                        }
+
+                        if withVerticalDividerLine && i < columnWidths.count - 1 {
+                            let x = originalTextRect.origin.x + availableSpace.width + horizontalPadding
+                            drawLine(CGPoint(x: x, y: originalTextRect.origin.y), p2: CGPoint(x: x, y: originalTextRect.origin.y + suggestedSize.height))
                         }
                     }
                     
@@ -970,7 +975,7 @@ public class SimplePDF {
             //CGContextStrokeRect(context, rect)
         }
         
-        private func drawLine(p1: CGPoint, p2:CGPoint, var color: UIColor? = nil, strokeWidth: CGFloat = 1) {
+        private func drawLine(p1: CGPoint, p2:CGPoint, var color: UIColor? = nil, strokeWidth: CGFloat = 0.5) {
             if(color == nil) {
                 color = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
             }
@@ -1350,14 +1355,14 @@ public class SimplePDF {
             return range
     }
     
-    public func addAttributedStringsToColumns(columnWidths: [CGFloat], strings: [NSAttributedString], horizontalPadding: CGFloat = 5, allowSplitting: Bool = true, backgroundColor: UIColor? = nil) -> NSRange  {
-        var range = pdfWriter.addAttributedStringsToColumns(columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor, calculationOnly: true)
+    public func addAttributedStringsToColumns(columnWidths: [CGFloat], strings: [NSAttributedString], horizontalPadding: CGFloat = 5, allowSplitting: Bool = true, backgroundColor: UIColor? = nil, withVerticalDividerLine : Bool = false) -> NSRange  {
+        var range = pdfWriter.addAttributedStringsToColumns(columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor, calculationOnly: true, withVerticalDividerLine: withVerticalDividerLine)
         if range.location > 0 {
             moveHeadlinesToNewPage()
             // recalculate the range due to adding page break befor headlines
-            range = pdfWriter.addAttributedStringsToColumns(columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor, calculationOnly: true)
+            range = pdfWriter.addAttributedStringsToColumns(columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor, calculationOnly: true, withVerticalDividerLine: withVerticalDividerLine)
         }
-        let funcCall = DocumentStructure.FunctionCall.addAttributedStringsToColumns(columnWidths: columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor)
+        let funcCall = DocumentStructure.FunctionCall.addAttributedStringsToColumns(columnWidths: columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor, withVerticalDividerLine: withVerticalDividerLine)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
         self.document.documentElements.append(docNode)
         return range
