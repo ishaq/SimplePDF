@@ -70,6 +70,27 @@ public class SimplePDF {
                 }
             }
             
+            var contentLevel : Int {
+                get {
+                    switch(self) {
+                    case .addH1:
+                        return 1
+                    case .addH2:
+                        return 2
+                    case .addH3:
+                        return 3
+                    case .addH4:
+                        return 3
+                    case .addH5:
+                        return 5
+                    case .addH6:
+                        return 6
+                    default:
+                        return 7
+                    }
+                }
+            }
+            
             func execute(pdf: PDFWriter, calculationOnly: Bool = true) -> NSRange {
                 var pageRange = NSMakeRange(0, 0)
                 switch(self) {
@@ -1330,7 +1351,12 @@ public class SimplePDF {
     }
     
     public func addAttributedStringsToColumns(columnWidths: [CGFloat], strings: [NSAttributedString], horizontalPadding: CGFloat = 5, allowSplitting: Bool = true, backgroundColor: UIColor? = nil) -> NSRange  {
-        let range = pdfWriter.addAttributedStringsToColumns(columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor, calculationOnly: true)
+        var range = pdfWriter.addAttributedStringsToColumns(columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor, calculationOnly: true)
+        if range.location > 0 {
+            moveHeadlinesToNewPage()
+            // recalculate the range due to adding page break befor headlines
+            range = pdfWriter.addAttributedStringsToColumns(columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor, calculationOnly: true)
+        }
         let funcCall = DocumentStructure.FunctionCall.addAttributedStringsToColumns(columnWidths: columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
         self.document.documentElements.append(docNode)
@@ -1341,7 +1367,26 @@ public class SimplePDF {
         return addAttributedStringsToColumns([pdfWriter.availablePageRect.size.width], strings: [attrString], horizontalPadding: 0.0, allowSplitting: allowSplitting, backgroundColor: backgroundBoxColor)
     }
     
-    // This function can be used to render a view to a PDF page (mostly useful to design cover pages). A view is always added to its own page. It starts 
+    private func moveHeadlinesToNewPage() {
+        if let prevDocNode = self.document.documentElements.last {
+            switch prevDocNode.functionCall {
+            case .addH1, .addH2, .addH3, .addH4, .addH5, .addH6:
+                var newPageDocElementIndex = document.documentElements.endIndex - 1
+                // check for higher level headlines, e.g. if the a text in section 3.1.1 also move healines 3. and 3.1. to the new page
+                while self.document.documentElements[newPageDocElementIndex-1].functionCall.contentLevel < self.document.documentElements[newPageDocElementIndex].functionCall.contentLevel {
+                    newPageDocElementIndex -= 1
+                }
+                
+                let newPageRange = pdfWriter.startNewPage(true)
+                let newPageFuncCall = DocumentStructure.FunctionCall.startNewPage
+                let newPageNode = DocumentStructure.DocumentElement(functionCall: newPageFuncCall, pageRange: newPageRange)
+                document.documentElements.insert(newPageNode, atIndex: newPageDocElementIndex)
+            default: break;
+            }
+        }
+    }
+    
+    // This function can be used to render a view to a PDF page (mostly useful to design cover pages). A view is always added to its own page. It starts
     // a new page if required, and any content added after it appears on the next page.
     //
     // Here's how you can design a cover page with a UIView (sample applies to any other view that you want to add to pdf)
