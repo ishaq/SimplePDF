@@ -150,7 +150,7 @@ public class SimplePDF {
             }
         }
         
-        private var document = Array<DocumentElement>()
+        private var documentElements = [DocumentElement]()
         private var tableOfContents = Array<TableOfContentsElement>()
         private var tableOfContentsPagesRange = NSMakeRange(0, 0)
         
@@ -164,8 +164,7 @@ public class SimplePDF {
             var tableOfContents = Array<TableOfContentsElement>()
             
             var pageIndex = -1
-            for (var i = 0; i < document.count; i++) {
-                let docNode = document[i]
+            for docNode in documentElements {
                 pageIndex += docNode.pageRange.location
                 
                 let (textStyle, label) = docNode.functionCall.getTableOfContentsInfo()
@@ -1159,8 +1158,7 @@ public class SimplePDF {
         // Start with a clean slate
         self.pdfWriter = initializePDFWriter(0)
         var pageIndex = -1
-        for (var i = 0; i < document.document.count; i++) {
-            let docElement = document.document[i]
+        for docElement in document.documentElements {
             // page number is: let pageNumber = pageIndex + docElement.pageRange.location
             docElement.executeFunctionCall(pdfWriter, calculationOnly: true)
             pageIndex += (docElement.pageRange.location + docElement.pageRange.length)
@@ -1172,8 +1170,7 @@ public class SimplePDF {
         pdfWriter.openPDF(pdfFilePath, title: pdfTitle, author: authorName)
         pageIndex = -1
         
-        for (var i = 0; i < document.document.count; i++) {
-            let docElement = document.document[i]
+        for docElement in document.documentElements {
             // page number is: let pageNumber = pageIndex + docElement.pageRange.location
             docElement.executeFunctionCall(pdfWriter, calculationOnly: false)
             pageIndex += (docElement.pageRange.location + docElement.pageRange.length)
@@ -1195,8 +1192,7 @@ public class SimplePDF {
         document.tableOfContents = document.generateTableOfContents()
         var tocInserted = false
         var pageIndex = -1
-        for (var i = 0; i < document.document.count; i++) {
-            let docElement = document.document[i]
+        for docElement in document.documentElements {
             let pageNumber = pageIndex + docElement.pageRange.location
             // if (location == 1 && pageNumber == document.tableOfContentsOnPage) || (location == 0 && pageNumber > document.tableOfContents) {
             if(pageNumber >= document.tableOfContentsOnPage && tocInserted == false) {
@@ -1227,8 +1223,7 @@ public class SimplePDF {
         tocInserted = false
         pageIndex = -1
         
-        for (var i = 0; i < document.document.count; i++) {
-            let docElement = document.document[i]
+        for docElement in document.documentElements {
             let pageNumber = pageIndex + docElement.pageRange.location
             if(pageNumber >= document.tableOfContentsOnPage && tocInserted == false) {
                 tocInserted = true
@@ -1257,7 +1252,7 @@ public class SimplePDF {
         let range = pdfWriter.startNewPage(true)
         let funcCall = DocumentStructure.FunctionCall.startNewPage
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-        document.document.append(docNode)
+        document.documentElements.append(docNode)
         return range
     }
     
@@ -1265,7 +1260,7 @@ public class SimplePDF {
         let range = pdfWriter.addHeadline(string, style: .H1, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addH1(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-        document.document.append(docNode)
+        document.documentElements.append(docNode)
         return range
     }
     
@@ -1273,7 +1268,7 @@ public class SimplePDF {
         let range = pdfWriter.addHeadline(string, style: .H2, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addH2(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-        document.document.append(docNode)
+        document.documentElements.append(docNode)
         return range
     }
     
@@ -1281,7 +1276,7 @@ public class SimplePDF {
         let range = pdfWriter.addHeadline(string, style: .H3, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addH3(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-        document.document.append(docNode)
+        document.documentElements.append(docNode)
         return range
     }
     
@@ -1289,7 +1284,7 @@ public class SimplePDF {
         let range = pdfWriter.addHeadline(string, style: .H4, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addH4(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-        document.document.append(docNode)
+        document.documentElements.append(docNode)
         return range
     }
     
@@ -1297,7 +1292,7 @@ public class SimplePDF {
         let range = pdfWriter.addHeadline(string, style: .H5, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addH5(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-        document.document.append(docNode)
+        document.documentElements.append(docNode)
         return range
     }
     
@@ -1305,7 +1300,7 @@ public class SimplePDF {
         let range = pdfWriter.addHeadline(string, style: .H6, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addH6(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-        document.document.append(docNode)
+        document.documentElements.append(docNode)
         return range
     }
     
@@ -1313,7 +1308,7 @@ public class SimplePDF {
         let range = pdfWriter.addBodyText(string, backgroundBoxColor: backgroundBoxColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addBodyText(string: string, backgroundBoxColor: backgroundBoxColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-        document.document.append(docNode)
+        document.documentElements.append(docNode)
         return range
     }
     
@@ -1321,7 +1316,7 @@ public class SimplePDF {
         let range = pdfWriter.addImages(imagePaths, imageCaptions: imageCaptions, imagesPerRow: imagesPerRow, spacing: spacing, padding: padding, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addImages(imagePaths: imagePaths, imageCaptions: imageCaptions, imagesPerRow: imagesPerRow, spacing: spacing, padding: padding)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-        document.document.append(docNode)
+        document.documentElements.append(docNode)
         return range
     }
     
@@ -1330,7 +1325,7 @@ public class SimplePDF {
             let range = pdfWriter.addImagesRow(imagePaths, imageCaptions: imageCaptions, columnWidths: columnWidths, spacing: spacing, padding: padding, captionBackgroundColor: captionBackgroundColor, imageBackgroundColor: imageBackgroundColor, calculationOnly: true)
             let funcCall = DocumentStructure.FunctionCall.addImagesRow(imagePaths: imagePaths, imageCaptions: imageCaptions, columnWidths: columnWidths, spacing: spacing, padding: padding, captionBackgroundColor: captionBackgroundColor, imageBackgroundColor: imageBackgroundColor)
             let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-            self.document.document.append(docNode)
+            self.document.documentElements.append(docNode)
             return range
     }
     
@@ -1338,7 +1333,7 @@ public class SimplePDF {
         let range = pdfWriter.addAttributedStringsToColumns(columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addAttributedStringsToColumns(columnWidths: columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor)
         let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-        self.document.document.append(docNode)
+        self.document.documentElements.append(docNode)
         return range
     }
     
@@ -1372,7 +1367,7 @@ public class SimplePDF {
         let range = pdfWriter.addView(view, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addView(view: view)
         let documentNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-        self.document.document.append(documentNode)
+        self.document.documentElements.append(documentNode)
         return range
     }
 }
