@@ -37,6 +37,7 @@ public class SimplePDF {
                 spacing: CGFloat, padding: CGFloat, captionBackgroundColor: UIColor?, imageBackgroundColor: UIColor?)
             case addAttributedStringsToColumns(columnWidths: [CGFloat], strings: [NSAttributedString], horizontalPadding: CGFloat, allowSplitting: Bool, backgroundColor: UIColor?, withVerticalDividerLine : Bool)
             case addView(view: UIView)
+            case addVerticalSpace(space: CGFloat)
             
             var description: String {
                 get {
@@ -65,6 +66,8 @@ public class SimplePDF {
                         return "addAttributedStringsToColumns"
                     case .addView/*(let view)*/:
                         return "addView"
+                    case .addVerticalSpace(let space):
+                        return "addVerticalSpace (\(space))"
                     }
                     
                 }
@@ -118,6 +121,8 @@ public class SimplePDF {
                     pageRange = pdf.addAttributedStringsToColumns(columnWidths, strings: strings, horizontalPadding: horizontalPadding, allowSplitting: allowSplitting, backgroundColor: backgroundColor, calculationOnly: calculationOnly, withVerticalDividerLine: withVerticalDividerLine)
                 case .addView(let view):
                     pageRange = pdf.addView(view, calculationOnly: calculationOnly)
+                case .addVerticalSpace(let space):
+                    pageRange = pdf.addVerticalSpace(space, calculationOnly: calculationOnly)
                 }
                 
                 return pageRange
@@ -920,6 +925,14 @@ public class SimplePDF {
             return range
         }
         
+        private func addVerticalSpace(space: CGFloat, calculationOnly: Bool = false) -> NSRange {
+            if currentPage == -1 {
+                startNewPage(calculationOnly)
+            }
+            currentLocation.y += space
+            return NSMakeRange(0, 0)
+        }
+        
         private func drawTableofContents(document:DocumentStructure, calculationOnly:Bool = true) -> NSRange {
             if(document.tableOfContents.count == 0) {
                 return NSMakeRange(0, 0)
@@ -1416,6 +1429,14 @@ public class SimplePDF {
     public func addView(view: UIView) -> NSRange {
         let range = pdfWriter.addView(view, calculationOnly: true)
         let funcCall = DocumentStructure.FunctionCall.addView(view: view)
+        let documentNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
+        self.document.documentElements.append(documentNode)
+        return range
+    }
+    
+    public func addVerticalSpace(space: CGFloat) -> NSRange {
+        let range = pdfWriter.addVerticalSpace(space, calculationOnly: true)
+        let funcCall = DocumentStructure.FunctionCall.addVerticalSpace(space: space)
         let documentNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
         self.document.documentElements.append(documentNode)
         return range
