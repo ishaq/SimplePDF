@@ -1214,7 +1214,7 @@ public class SimplePDF {
     }*/
 
     // MARK: - SimplePDF methods
-    public init(pdfTitle: String, authorName: String, fileName : String = "SimplePDF.pdf", pageSize: PageSize = .A4, pageOrientation: PageOrientation = .Portrait,
+    public init(pdfTitle: String, authorName: String, fileName : String = "SimplePDF.pdf", replaceFileIfExisting: Bool = false, pageSize: PageSize = .A4, pageOrientation: PageOrientation = .Portrait,
         leftMargin:CGFloat = 36, rightMargin:CGFloat = 36, topMargin: CGFloat = 72, bottomMargin: CGFloat = 36, textFormatter: DefaultTextFormatter = DefaultTextFormatter()) {
             
             self.leftMargin = leftMargin
@@ -1230,8 +1230,8 @@ public class SimplePDF {
         
             self.pdfFileName = fileName
             let tmpFilePath = SimplePDFUtilities.pathForTmpFile(pdfFileName)
-            self.pdfFilePath = SimplePDFUtilities.renameFilePathToPreventNameCollissions(tmpFilePath)
-            
+            self.pdfFilePath = replaceFileIfExisting ? tmpFilePath : SimplePDFUtilities.renameFilePathToPreventNameCollissions(tmpFilePath)
+        
             self.pdfWriter = PDFWriter(textFormatter: textFormatter, pageSize: pageSize, pageOrientation: pageOrientation,
                 leftMargin: leftMargin, rightMargin: rightMargin, topMargin: topMargin, bottomMargin: bottomMargin,
                 pagesCount: 0,
