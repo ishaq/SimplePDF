@@ -21,15 +21,8 @@ class SimplePDFUtilities {
     
     class func getApplicationVersion() -> String {
         let dictionary = getApplicationInfoDictionary()
-        
-        guard let shortVersionString = dictionary["CFBundleShortVersionString"] as? String else {
-            return ""
-        }
-        
-        guard let build = dictionary["CFBundleVersion"] as? String else {
-            return "\(shortVersionString)"
-        }
-        
+        let shortVersionString = dictionary["CFBundleShortVersionString"] as? String ?? ""
+        let build = dictionary["CFBundleVersion"] as? String ?? ""
         return "\(shortVersionString) Build: \(build)"
     }
     
