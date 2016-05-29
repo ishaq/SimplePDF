@@ -148,7 +148,7 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         // add page numbers to the footer (center aligned)
         let centerAlignment = NSMutableParagraphStyle()
         centerAlignment.alignment = .Center
-        let footerString = NSMutableAttributedString(string: "\(pdf.kPageNumberPlaceholder) of \(pdf.kPagesCountPlaceholder)")
+        let footerString = NSMutableAttributedString(string: "\(SimplePDF.pageNumberPlaceholder) of \(SimplePDF.pagesCountPlaceholder)")
         footerString.addAttribute(NSParagraphStyleAttributeName, value: centerAlignment, range: NSMakeRange(0, footerString.length))
         let footer = SimplePDF.HeaderFooterText(type: .Footer, pageRange: NSMakeRange(1, Int.max), attributedString: footerString)
         pdf.headerFooterTexts.append(footer)

@@ -16,7 +16,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-As of this writing, SimplePDF is in Swift 2.2. Therefore you need Xcode 7.3 for development. You can target iOS 8.0 and later.
+As of this writing, SimplePDF is in Swift 2.2.1. Therefore you need Xcode 7.3.1 for development. You can target iOS 8.0 and later.
 
 
 ## Installation
@@ -79,7 +79,7 @@ There are two types of Headers/Footers.
 
 **Alignment:** Header/Footer can have _Left_, _Center_ or _Right_ alignment, It will be added to the corresponding location on top/bottom of the page.
 
-**Page Number & Pages Count:** In a text header/footer, occurrences of `pdf.kPageNumberPlaceholder` are replaced with the current page number and occurrences of `pdf.kPagesCountPlaceholder` are replaced with pages-count.
+p**Page Number & Pages Count:** In a text header/footer, occurrences of `SimplePDF.pageNumberPlaceholder` are replaced with the current page number and occurrences of `SimplePDF.pagesCountPlaceholder` are replaced with pages-count.
 
 The `pageRange` attribute controls which pages the header/footer appears on. `pageRange` is an `NSRange` instance, `pageRange.location` specifies zero based page index where the header/footer would first appear. `pageRange.length` specifies how many pages it would appear on (starting at `pageRange.location`).
 
@@ -128,7 +128,7 @@ And here's how page number with pages-count could be added
 // add page numbers to the footer (center aligned)
 let centerAlignment = NSMutableParagraphStyle()
 centerAlignment.alignment = .Center
-let footerString = NSMutableAttributedString(string: "\(pdf.kPageNumberPlaceholder) of \(pdf.kPagesCountPlaceholder)")
+let footerString = NSMutableAttributedString(string: "\(SimplePDF.pageNumberPlaceholder) of \(SimplePDF.pagesCountPlaceholder)")
 footerString.addAttribute(NSParagraphStyleAttributeName, value: centerAlignment, range: NSMakeRange(0, footerString.length))
 // location of pageRange is 1, so it skips page 0 i.e. the first page
 let footer = SimplePDF.HeaderFooterText(type: .Footer, pageRange: NSMakeRange(1, Int.max), attributedString: footerString)
@@ -165,9 +165,10 @@ SimplePDF will now use your subclass instead of `DefaultTextFormatter` to format
 * `addImages(imagePaths:[String], imageCaptions: [String], imagesPerRow:Int = 3)` adds images to pdf. It resizes the images uniformly to fit `imagesPerRow` images in available page width. Passing nil for image (and empty string for caption) keeps corresponding column empty.
 * `addImagesRow(imagePaths: [String], imageCaptions: [NSAttributedString], columnWidths: [CGFloat])` adds a single row of images using column widths specified. Passing nil for image (and empty string for caption) keeps corresponding column empty.
 
-## Author
+## Authors
 
-Muhammad Ishaq, ishaq@ishaq.pk
+Muhammad Ishaq (ishaq@ishaq.pk), Martin Stemmle (hi@martn.st)
+
 
 ## License
 

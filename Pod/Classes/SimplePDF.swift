@@ -1045,7 +1045,7 @@ public class SimplePDF {
                 color = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
             }
             let context = UIGraphicsGetCurrentContext()
-            CGContextSetStrokeColorWithColor(context, color.CGColor);
+            CGContextSetStrokeColorWithColor(context, color!.CGColor);
             CGContextSetLineWidth(context, strokeWidth);
             CGContextMoveToPoint(context, p1.x, p1.y);
             CGContextAddLineToPoint(context, p2.x, p2.y);
