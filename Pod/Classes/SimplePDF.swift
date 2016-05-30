@@ -551,7 +551,8 @@ public class SimplePDF {
         
         // MARK: - Document elements
         
-        private func addHeadline(string: String, style: TextStyle, var backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
+        private func addHeadline(string: String, style: TextStyle, backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
+            
             guard [TextStyle.H1, TextStyle.H2, TextStyle.H3, TextStyle.H4, TextStyle.H5, TextStyle.H6].contains(style) else {
                 fatalError("style must be a headline, but was: \(style)")
             }
@@ -565,7 +566,7 @@ public class SimplePDF {
             return addAttributedString(attrString, allowSplitting: false, boxStyle: boxStyle, calculationOnly: calculationOnly)
         }
 
-        private func addBodyText(string: String, var backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
+        private func addBodyText(string: String, backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
             let attrString = textFormatter.attributedStringForStyle(string, style: .BodyText)
             var boxStyle = textFormatter.boxStyleForTextStyle(.BodyText)
             if(backgroundBoxColor != nil) {
@@ -1040,7 +1041,8 @@ public class SimplePDF {
             //CGContextStrokeRect(context, rect)
         }
         
-        private func drawLine(p1: CGPoint, p2:CGPoint, var color: UIColor? = nil, strokeWidth: CGFloat = 0.5) {
+        private func drawLine(p1: CGPoint, p2:CGPoint, color: UIColor? = nil, strokeWidth: CGFloat = 0.5) {
+            var color = color
             if(color == nil) {
                 color = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
             }
