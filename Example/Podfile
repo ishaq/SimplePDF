@@ -1,11 +1,11 @@
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
-target 'SimplePDF_Example', :exclusive => true do
+target 'SimplePDF_Example' do
   pod 'SimplePDFSwift', :path => '../'
 end
 
-target 'SimplePDF_Tests', :exclusive => true do
+target 'SimplePDF_Tests' do
   pod 'SimplePDFSwift', :path => '../'
 
   pod 'Quick', '~> 0.8'

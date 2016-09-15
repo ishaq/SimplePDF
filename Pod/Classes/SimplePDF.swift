@@ -475,7 +475,10 @@ public class SimplePDF {
             var textRect = textRectIn
             textRect = convertRectToCoreTextCoordinates(textRect)
             
-            let context = UIGraphicsGetCurrentContext()
+            guard let context = UIGraphicsGetCurrentContext() else {
+                return
+            }
+            
             let bounds = getPageBounds()
             CGContextSetTextMatrix(context, CGAffineTransformIdentity)
             CGContextTranslateCTM(context, 0, bounds.size.height)
@@ -486,7 +489,7 @@ public class SimplePDF {
             CGPathAddRect(textPath, nil, textRect)
             let frameRef = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), textPath, nil)
             
-            CTFrameDraw(frameRef, context!)
+            CTFrameDraw(frameRef, context)
             
             // flip it back
             CGContextScaleCTM(context, 1.0, -1.0)
@@ -708,14 +711,17 @@ public class SimplePDF {
                         
                         if(calculationOnly == false) {
                             // flip context
-                            let context = UIGraphicsGetCurrentContext()
+                            guard let context = UIGraphicsGetCurrentContext() else {
+                                continue
+                            }
+                            
                             let bounds = UIGraphicsGetPDFContextBounds()
                             CGContextSetTextMatrix(context, CGAffineTransformIdentity)
                             CGContextTranslateCTM(context, bounds.origin.x, bounds.size.height)
                             CGContextScaleCTM(context, 1.0, -1.0)
                             
                             CGContextSetTextPosition(context, textPoint.x, textPoint.y)
-                            CTLineDraw(truncatedLine!, context!)
+                            CTLineDraw(truncatedLine!, context)
                             
                             // flip it back
                             CGContextScaleCTM(context, 1.0, -1.0)
@@ -895,7 +901,10 @@ public class SimplePDF {
                     
                     if(calculationOnly == false) {
                         // flip context
-                        let context = UIGraphicsGetCurrentContext()
+                        guard let context = UIGraphicsGetCurrentContext() else {
+                            continue
+                        }
+                        
                         let bounds = UIGraphicsGetPDFContextBounds()
                         CGContextSetTextMatrix(context, CGAffineTransformIdentity)
                         CGContextTranslateCTM(context, bounds.origin.x, bounds.size.height)
@@ -905,7 +914,7 @@ public class SimplePDF {
                         CGPathAddRect(textPath, nil, textRect)
                         let frameRef = CTFramesetterCreateFrame(thisFramesetter, thisRange, textPath, nil)
                         
-                        CTFrameDraw(frameRef, context!)
+                        CTFrameDraw(frameRef, context)
                         
                         // flip it back
                         CGContextScaleCTM(context, 1.0, -1.0)
@@ -971,8 +980,11 @@ public class SimplePDF {
             }
             
             if(calculationOnly == false) {
-                let context = UIGraphicsGetCurrentContext()
-                view.layer.renderInContext(context!)
+                guard let context = UIGraphicsGetCurrentContext() else {
+                    return range
+                }
+                
+                view.layer.renderInContext(context)
             }
             
             // one view per page, set Y to maximum so that next call inserts a page
@@ -1034,7 +1046,10 @@ public class SimplePDF {
         // MARK: - Drawing
         private func drawRect(rect: CGRect, fillColor fillColorIn: UIColor? = nil) {
             let fillColor = fillColorIn ?? UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
-            let context = UIGraphicsGetCurrentContext()
+            guard let context = UIGraphicsGetCurrentContext() else {
+                return
+            }
+            
             CGContextSetRGBStrokeColor(context, 0, 0, 0, 1)
             CGContextSetFillColorWithColor(context, fillColor.CGColor)
             CGContextFillRect(context, rect)
@@ -1046,11 +1061,14 @@ public class SimplePDF {
             if(color == nil) {
                 color = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
             }
-            let context = UIGraphicsGetCurrentContext()
-            CGContextSetStrokeColorWithColor(context, color!.CGColor);
-            CGContextSetLineWidth(context, strokeWidth);
-            CGContextMoveToPoint(context, p1.x, p1.y);
-            CGContextAddLineToPoint(context, p2.x, p2.y);
+            guard let context = UIGraphicsGetCurrentContext() else {
+                return
+            }
+            
+            CGContextSetStrokeColorWithColor(context, color!.CGColor)
+            CGContextSetLineWidth(context, strokeWidth)
+            CGContextMoveToPoint(context, p1.x, p1.y)
+            CGContextAddLineToPoint(context, p2.x, p2.y)
             CGContextDrawPath(context, CGPathDrawingMode.Stroke)
         }
         
