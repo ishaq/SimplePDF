@@ -23,7 +23,7 @@ class SimplePDFLabel: UILabel {
         
         let isPDF = !CGRectIsEmpty(UIGraphicsGetPDFContextBounds())
         
-        if(!layer.shouldRasterize && isPDF && (self.backgroundColor == nil || CGColorGetAlpha(self.backgroundColor?.CGColor) == 0)) {
+        if(!layer.shouldRasterize && isPDF && (self.backgroundColor == nil || CGColorGetAlpha(self.backgroundColor!.CGColor) == 0)) {
             self.drawRect(self.bounds)
         }
         else {
