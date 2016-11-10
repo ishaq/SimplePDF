@@ -16,7 +16,9 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-As of this writing, SimplePDF is in Swift 2.2.1. Therefore you need Xcode 7.3.1 for development. You can target iOS 8.0 and later.
+SimplePDF is written in Swift 3.0 as of version 0.2.1. Therefore you need Xcode 8.0 for development. You can target iOS 8.0 and later.
+
+To use SimplePDF on previous versions of Swift, you can use a version earlier than **0.2.1**.
 
 
 ## Installation
