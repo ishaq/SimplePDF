@@ -7,28 +7,15 @@
 import UIKit
 
 class SimplePDFLabel: UILabel {
-
-    /*
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
-        // Drawing code
-    }
-    */
     
-    override func drawLayer(layer: CALayer?, inContext ctx: CGContext?) {
-        guard let ctx = ctx, layer = layer else {
-            return
-        }
-        
-        let isPDF = !CGRectIsEmpty(UIGraphicsGetPDFContextBounds())
-        
-        if(!layer.shouldRasterize && isPDF && (self.backgroundColor == nil || CGColorGetAlpha(self.backgroundColor!.CGColor) == 0)) {
-            self.drawRect(self.bounds)
+    override func drawText(in rect: CGRect) {
+        let isPDF = !UIGraphicsGetPDFContextBounds().isEmpty
+        let layer = self.layer
+        if(!layer.shouldRasterize && isPDF && (self.backgroundColor == nil || self.backgroundColor!.cgColor.alpha == 0)) {
+            self.draw(self.bounds)
         }
         else {
-            super.drawLayer(layer, inContext: ctx)
+            super.drawText(in: rect)
         }
     }
-
 }

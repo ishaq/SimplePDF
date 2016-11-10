@@ -21,21 +21,19 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func generateAndOpenPDF(sender: AnyObject) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
+    @IBAction func generateAndOpenPDF(_ sender: AnyObject) {
+        DispatchQueue.global().async {
             self.generateAndOpenPDFHandler()
         }
-        
-        
     }
     
     // MARK: - UIDocumentInteractionControllerDelegate
-    func documentInteractionControllerViewControllerForPreview(controller: UIDocumentInteractionController) -> UIViewController {
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
         return self
     }
     
     // MARK: - Private
-    private func generateAndOpenPDFHandler() {
+    fileprivate func generateAndOpenPDFHandler() {
         let pdf = SimplePDF(pdfTitle: "Simple PDF Demo", authorName: "Muhammad Ishaq")
         
         self.addDocumentCover(pdf)
@@ -46,15 +44,15 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         let tmpPDFPath = pdf.writePDFWithTableOfContents()
         
         // open the generated PDF
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            let pdfURL = NSURL(fileURLWithPath: tmpPDFPath)
-            let interactionController = UIDocumentInteractionController(URL: pdfURL)
+        DispatchQueue.main.async(execute: { () -> Void in
+            let pdfURL = URL(fileURLWithPath: tmpPDFPath)
+            let interactionController = UIDocumentInteractionController(url: pdfURL)
             interactionController.delegate = self
-            interactionController.presentPreviewAnimated(true)
+            interactionController.presentPreview(animated: true)
         })
     }
     
-    private func addDocumentCover(pdf: SimplePDF) {
+    fileprivate func addDocumentCover(_ pdf: SimplePDF) {
         // Cover Page can be designed in a nib (.xib) and added to pdf via `pdf.addView()` call.
         //
         // Here's how you can design a cover page with using a UIView (sample applies to any other view that you want to add to pdf)
@@ -79,9 +77,9 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         
         // NOTE: we manually format document title and use `addAttributedString` instead of, say, `addH1` because we don't want it in the TOC
         let documentTitle = NSMutableAttributedString(string: "Demo PDF")
-        let titleFont = UIFont.boldSystemFontOfSize(48)
+        let titleFont = UIFont.boldSystemFont(ofSize: 48)
         let paragraphAlignment = NSMutableParagraphStyle()
-        paragraphAlignment.alignment = .Center
+        paragraphAlignment.alignment = .center
         let titleRange = NSMakeRange(0, documentTitle.length)
         documentTitle.addAttribute(NSFontAttributeName, value: titleFont, range: titleRange)
         documentTitle.addAttribute(NSParagraphStyleAttributeName, value: paragraphAlignment, range: titleRange)
@@ -91,11 +89,11 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         pdf.startNewPage()
     }
     
-    private func addDocumentContent(pdf: SimplePDF) {
+    fileprivate func addDocumentContent(_ pdf: SimplePDF) {
         pdf.addH2("Level 2 Heading")
         pdf.addBodyText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec enim est. Phasellus eu lacus ac ex facilisis porta eu ac nisi. Ut ullamcorper id justo vel lobortis. Cras sed egestas elit, malesuada maximus metus. Mauris faucibus, metus et interdum feugiat, mauris felis varius lacus, porta semper ipsum eros eget massa. Fusce et diam ac lacus bibendum rutrum ac nec neque. Proin rutrum nisl nec vestibulum commodo. Donec eu dolor quis sapien lobortis elementum. Ut tincidunt justo at mauris lobortis placerat. Nam tristique ornare luctus. Donec eu pretium sapien. Pellentesque venenatis eros nulla, eget tincidunt mauris tempor eget. In egestas orci a sem congue semper.")
         
-        let imagePath = NSBundle.mainBundle().pathForResource("Demo", ofType: "png")!
+        let imagePath = Bundle.main.path(forResource: "Demo", ofType: "png")!
         let imageCaption = "fig 1: Lorem ipsum dolor sit amet"
         pdf.addImages([imagePath], imageCaptions: [imageCaption], imagesPerRow: 1)
         
@@ -117,51 +115,51 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         }
     }
     
-    private func addHeadersFooters(pdf: SimplePDF) {
-        let regularFont = UIFont.systemFontOfSize(8)
-        let boldFont = UIFont.boldSystemFontOfSize(8)
+    fileprivate func addHeadersFooters(_ pdf: SimplePDF) {
+        let regularFont = UIFont.systemFont(ofSize: 8)
+        let boldFont = UIFont.boldSystemFont(ofSize: 8)
         let leftAlignment = NSMutableParagraphStyle()
-        leftAlignment.alignment = NSTextAlignment.Left
+        leftAlignment.alignment = NSTextAlignment.left
         
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        dateFormatter.timeStyle = NSDateFormatterStyle.MediumStyle
-        let dateString = dateFormatter.stringFromDate(NSDate())
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = DateFormatter.Style.medium
+        dateFormatter.timeStyle = DateFormatter.Style.medium
+        let dateString = dateFormatter.string(from: Date())
         
         // add some document information to the header, on left
         let leftHeaderString = "Author: Muhammad Ishaq\nDate/Time: \(dateString)"
         let leftHeaderAttrString = NSMutableAttributedString(string: leftHeaderString)
         leftHeaderAttrString.addAttribute(NSParagraphStyleAttributeName, value: leftAlignment, range: NSMakeRange(0, leftHeaderAttrString.length))
         leftHeaderAttrString.addAttribute(NSFontAttributeName, value: regularFont, range: NSMakeRange(0, leftHeaderAttrString.length))
-        leftHeaderAttrString.addAttribute(NSFontAttributeName, value: boldFont, range: leftHeaderAttrString.mutableString.rangeOfString("Author:"))
-        leftHeaderAttrString.addAttribute(NSFontAttributeName, value: boldFont, range: leftHeaderAttrString.mutableString.rangeOfString("Date/Time:"))
-        let header = SimplePDF.HeaderFooterText(type: .Header, pageRange: NSMakeRange(1, Int.max), attributedString: leftHeaderAttrString)
+        leftHeaderAttrString.addAttribute(NSFontAttributeName, value: boldFont, range: leftHeaderAttrString.mutableString.range(of: "Author:"))
+        leftHeaderAttrString.addAttribute(NSFontAttributeName, value: boldFont, range: leftHeaderAttrString.mutableString.range(of: "Date/Time:"))
+        let header = SimplePDF.HeaderFooterText(type: .header, pageRange: NSMakeRange(1, Int.max), attributedString: leftHeaderAttrString)
         pdf.headerFooterTexts.append(header)
         
         // add a logo to the header, on right
-        let logoPath = NSBundle.mainBundle().pathForResource("Demo", ofType: "png")
+        let logoPath = Bundle.main.path(forResource: "Demo", ofType: "png")
         // NOTE: we can specify either the image or its path
-        let rightLogo = SimplePDF.HeaderFooterImage(type: .Header, pageRange: NSMakeRange(1, Int.max),
-                                                    imagePath: logoPath!, image:nil, imageHeight: 35, alignment: .Right)
+        let rightLogo = SimplePDF.HeaderFooterImage(type: .header, pageRange: NSMakeRange(1, Int.max),
+                                                    imagePath: logoPath!, image:nil, imageHeight: 35, alignment: .right)
         pdf.headerFooterImages.append(rightLogo)
         
         // add page numbers to the footer (center aligned)
         let centerAlignment = NSMutableParagraphStyle()
-        centerAlignment.alignment = .Center
+        centerAlignment.alignment = .center
         let footerString = NSMutableAttributedString(string: "\(SimplePDF.pageNumberPlaceholder) of \(SimplePDF.pagesCountPlaceholder)")
         footerString.addAttribute(NSParagraphStyleAttributeName, value: centerAlignment, range: NSMakeRange(0, footerString.length))
-        let footer = SimplePDF.HeaderFooterText(type: .Footer, pageRange: NSMakeRange(1, Int.max), attributedString: footerString)
+        let footer = SimplePDF.HeaderFooterText(type: .footer, pageRange: NSMakeRange(1, Int.max), attributedString: footerString)
         pdf.headerFooterTexts.append(footer)
         
         // add a link to your app may be
         let link = NSMutableAttributedString(string: "http://ishaq.pk/")
         link.addAttribute(NSParagraphStyleAttributeName, value: leftAlignment, range: NSMakeRange(0, link.length))
-        let appLinkFooter = SimplePDF.HeaderFooterText(type: .Footer, pageRange: NSMakeRange(1, Int.max), attributedString: link)
+        let appLinkFooter = SimplePDF.HeaderFooterText(type: .footer, pageRange: NSMakeRange(1, Int.max), attributedString: link)
         pdf.headerFooterTexts.append(appLinkFooter)
         
         // NOTE: we can specify either the image or its path
-        let footerImage = SimplePDF.HeaderFooterImage(type: .Footer, pageRange: NSMakeRange(1, Int.max),
-                                                      imagePath: logoPath!, image:nil, imageHeight: 20, alignment: .Right)
+        let footerImage = SimplePDF.HeaderFooterImage(type: .footer, pageRange: NSMakeRange(1, Int.max),
+                                                      imagePath: logoPath!, image:nil, imageHeight: 20, alignment: .right)
         pdf.headerFooterImages.append(footerImage)
     }
 }
