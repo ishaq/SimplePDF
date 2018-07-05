@@ -1,10 +1,12 @@
 # SimplePDF
 
 <!-- [![CI Status](http://img.shields.io/travis/Muhammad Ishaq/SimplePDF.svg?style=flat)](https://travis-ci.org/Muhammad Ishaq/SimplePDF) -->
-[![Version](https://img.shields.io/cocoapods/v/SimplePDFSwift.svg?style=flat)](http://cocoapods.org/pods/SimplePDFSwift)
+<!--[![Version](https://img.shields.io/cocoapods/v/SimplePDFSwift.svg?style=flat)](http://cocoapods.org/pods/SimplePDFSwift)
 [![License](https://img.shields.io/cocoapods/l/SimplePDFSwift.svg?style=flat)](http://cocoapods.org/pods/SimplePDFSwift)
 [![Platform](https://img.shields.io/cocoapods/p/SimplePDFSwift.svg?style=flat)](http://cocoapods.org/pods/SimplePDFSwift)
-[![Stories in Ready](https://badge.waffle.io/ishaq/SimplePDF.png?label=ready&title=Ready)](https://waffle.io/ishaq/SimplePDF)
+[![Stories in Ready](https://badge.waffle.io/ishaq/SimplePDF.png?label=ready&title=Ready)](https://waffle.io/ishaq/SimplePDF)-->
+
+**This class is no longer maintained by me. If you want to take over, send me an email!**
 
 SimplePDF is a Swift class that lets you create simple PDF documents with page numbers and table of contents. The code is a rough implementation of [Builder](https://en.wikipedia.org/wiki/Builder_pattern) design pattern. See the demo project for usage example.
 
