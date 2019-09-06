@@ -8,6 +8,6 @@ end
 target 'SimplePDF_Tests' do
   pod 'SimplePDFSwift', :path => '../'
 
-  pod 'Quick', '~> 0.10'
-  pod 'Nimble', '~> 5.1'
+  #pod 'Quick', '~> 0.10'
+  #pod 'Nimble', '~> 5.1'
 end

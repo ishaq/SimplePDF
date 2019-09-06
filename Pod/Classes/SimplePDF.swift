@@ -11,15 +11,15 @@ import CoreText
 //import XCGLogger
 
 /**
-*  Generate Simple Documents with Images. TOC gets generated and put at (roughly) specified page index
-*/
+ *  Generate Simple Documents with Images. TOC gets generated and put at (roughly) specified page index
+ */
 open class SimplePDF {
-
-    open static let defaultBackgroundBoxColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
-    open static let defaultSpacing:CGFloat = 8
-    open static let pageNumberPlaceholder = "{{PAGE_NUMBER}}"
-    open static let pagesCountPlaceholder = "{{PAGES_COUNT}}"
-
+    
+    public static let defaultBackgroundBoxColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
+    public static let defaultSpacing:CGFloat = 8
+    public static let pageNumberPlaceholder = "{{PAGE_NUMBER}}"
+    public static let pagesCountPlaceholder = "{{PAGES_COUNT}}"
+    
     // MARK: - Document Structure
     fileprivate class DocumentStructure {
         // MARK: - FunctionCall (sort of a "Command" pattern)
@@ -55,7 +55,7 @@ open class SimplePDF {
                     case .addH6(let string, _ /*let backgroundBoxColor*/):
                         return "addH6 (\(string))"
                     case .addBodyText(let string, _ /*let backgroundBoxColor*/):
-                        return "addBodyText (\(string.substring(to: string.characters.index(string.startIndex, offsetBy: 25))))"
+                        return "addBodyText (\(String(string[..<string.index(string.startIndex, offsetBy: 25)])))"
                     case .startNewPage:
                         return "startNewPage"
                     case .addImages/*(let imagePaths, let imageCaptions, let imagesPerRow, let spacing, let padding)*/:
@@ -159,7 +159,7 @@ open class SimplePDF {
                 self.pageRange = pageRange
             }
             
-            func executeFunctionCall(_ pdf: PDFWriter, calculationOnly: Bool = true) -> NSRange {
+            @discardableResult func executeFunctionCall(_ pdf: PDFWriter, calculationOnly: Bool = true) -> NSRange {
                 self.pageRange = self.functionCall.execute(pdf, calculationOnly: calculationOnly)
                 return self.pageRange
             }
@@ -209,26 +209,26 @@ open class SimplePDF {
             return tableOfContents
         }
         /*
-        var pagesCount: Int {
-            get {
-                if(document.count == 0) {
-                    XCGLogger.warning("document doesn't have any elements, pagesCount would not be accurate")
-                }
-                if((tableOfContentsPagesRange.location + tableOfContentsPagesRange.length) == 0) {
-                    XCGLogger.warning("table of contents not laid out, pagesCount would not be accurate")
-                }
-                var pagesCount = 0
-                for (var i = 0; i < document.count; i++) {
-                    let docNode = document[i]
-                    //XCGLogger.debug("\(i) \(docNode.functionCall) \(StringFromRange(docNode.pageRange))")
-                    pagesCount += (docNode.pageRange.location + docNode.pageRange.length)
-                }
-                
-                pagesCount += (tableOfContentsPagesRange.location + tableOfContentsPagesRange.length)
-                
-                return pagesCount
-            }
-        }*/
+         var pagesCount: Int {
+         get {
+         if(document.count == 0) {
+         XCGLogger.warning("document doesn't have any elements, pagesCount would not be accurate")
+         }
+         if((tableOfContentsPagesRange.location + tableOfContentsPagesRange.length) == 0) {
+         XCGLogger.warning("table of contents not laid out, pagesCount would not be accurate")
+         }
+         var pagesCount = 0
+         for (var i = 0; i < document.count; i++) {
+         let docNode = document[i]
+         //XCGLogger.debug("\(i) \(docNode.functionCall) \(StringFromRange(docNode.pageRange))")
+         pagesCount += (docNode.pageRange.location + docNode.pageRange.length)
+         }
+         
+         pagesCount += (tableOfContentsPagesRange.location + tableOfContentsPagesRange.length)
+         
+         return pagesCount
+         }
+         }*/
     }
     
     // MARK: - Text Style
@@ -277,25 +277,25 @@ open class SimplePDF {
             let paragraphStyle = NSMutableParagraphStyle()
             switch(style) {
             case .h1:
-                attrString.addAttribute(NSFontAttributeName, value:UIFont.boldSystemFont(ofSize: 24), range: NSMakeRange(0, attrString.length))
+                attrString.addAttribute(NSAttributedString.Key.font, value:UIFont.boldSystemFont(ofSize: 24), range: NSMakeRange(0, attrString.length))
                 paragraphStyle.alignment = .center
             case .h2:
-                attrString.addAttribute(NSFontAttributeName, value:UIFont.boldSystemFont(ofSize: 20), range: NSMakeRange(0, attrString.length))
+                attrString.addAttribute(NSAttributedString.Key.font, value:UIFont.boldSystemFont(ofSize: 20), range: NSMakeRange(0, attrString.length))
                 paragraphStyle.alignment = .center
             case .h3:
-                attrString.addAttribute(NSFontAttributeName, value:UIFont.boldSystemFont(ofSize: 16), range: NSMakeRange(0, attrString.length))
+                attrString.addAttribute(NSAttributedString.Key.font, value:UIFont.boldSystemFont(ofSize: 16), range: NSMakeRange(0, attrString.length))
                 paragraphStyle.alignment = .center
             case .h4:
-                attrString.addAttribute(NSFontAttributeName, value:UIFont.boldSystemFont(ofSize: 14), range: NSMakeRange(0, attrString.length))
+                attrString.addAttribute(NSAttributedString.Key.font, value:UIFont.boldSystemFont(ofSize: 14), range: NSMakeRange(0, attrString.length))
             case .h5:
-                attrString.addAttribute(NSFontAttributeName, value:UIFont.boldSystemFont(ofSize: 12), range: NSMakeRange(0, attrString.length))
+                attrString.addAttribute(NSAttributedString.Key.font, value:UIFont.boldSystemFont(ofSize: 12), range: NSMakeRange(0, attrString.length))
             case .h6:
-                attrString.addAttribute(NSFontAttributeName, value:UIFont.boldSystemFont(ofSize: 10), range: NSMakeRange(0, attrString.length))
+                attrString.addAttribute(NSAttributedString.Key.font, value:UIFont.boldSystemFont(ofSize: 10), range: NSMakeRange(0, attrString.length))
             case .bodyText:
-                attrString.addAttribute(NSFontAttributeName, value:UIFont.systemFont(ofSize: 10), range: NSMakeRange(0, attrString.length))
+                attrString.addAttribute(NSAttributedString.Key.font, value:UIFont.systemFont(ofSize: 10), range: NSMakeRange(0, attrString.length))
             }
             
-            attrString.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, attrString.length))
+            attrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attrString.length))
             return attrString
         }
         
@@ -338,32 +338,32 @@ open class SimplePDF {
         var headerFooterImages: Array<HeaderFooterImage>
         
         init(textFormatter: DefaultTextFormatter, pageSize: PageSize, pageOrientation: PageOrientation, leftMargin: CGFloat, rightMargin: CGFloat,
-            topMargin: CGFloat, bottomMargin: CGFloat, pagesCount: Int, headerFooterTexts: Array<HeaderFooterText>,
-            headerFooterImages: Array<HeaderFooterImage>) {
-                self.textFormatter = textFormatter
-                self.pageSize = pageSize
-                self.pageOrientation = pageOrientation
-                self.leftMargin = leftMargin
-                self.rightMargin = rightMargin
-                self.topMargin = topMargin
-                self.bottomMargin = bottomMargin
-                
-                self.pagesCount = pagesCount
-                self.headerFooterImages = headerFooterImages
-                self.headerFooterTexts = headerFooterTexts
+             topMargin: CGFloat, bottomMargin: CGFloat, pagesCount: Int, headerFooterTexts: Array<HeaderFooterText>,
+             headerFooterImages: Array<HeaderFooterImage>) {
+            self.textFormatter = textFormatter
+            self.pageSize = pageSize
+            self.pageOrientation = pageOrientation
+            self.leftMargin = leftMargin
+            self.rightMargin = rightMargin
+            self.topMargin = topMargin
+            self.bottomMargin = bottomMargin
             
-                let bounds = getPageBounds()
-                let origin = CGPoint(x: bounds.origin.x + leftMargin, y: bounds.origin.y + topMargin)
-                let size = CGSize(width: bounds.size.width - (leftMargin + rightMargin),
-                    height: bounds.size.height - (topMargin + bottomMargin))
-                self.availablePageRect = CGRect(origin: origin, size: size)
+            self.pagesCount = pagesCount
+            self.headerFooterImages = headerFooterImages
+            self.headerFooterTexts = headerFooterTexts
+            
+            let bounds = getPageBounds()
+            let origin = CGPoint(x: bounds.origin.x + leftMargin, y: bounds.origin.y + topMargin)
+            let size = CGSize(width: bounds.size.width - (leftMargin + rightMargin),
+                              height: bounds.size.height - (topMargin + bottomMargin))
+            self.availablePageRect = CGRect(origin: origin, size: size)
         }
-
+        
         var availablePageSize: CGSize {
             get { return availablePageRect.size }
         }
         
-        fileprivate func openPDF(_ path: String, title: String?,  author: String?) -> NSError? {
+        @discardableResult fileprivate func openPDF(_ path: String, title: String?,  author: String?) -> NSError? {
             let pageRect = getPageBounds()
             
             var documentInfo = [kCGPDFContextCreator as String: "\(SimplePDFUtilities.getApplicationName()) \(SimplePDFUtilities.getApplicationVersion())"]
@@ -386,7 +386,7 @@ open class SimplePDF {
             UIGraphicsEndPDFContext()
         }
         
-        fileprivate func startNewPage(_ calculationOnly: Bool = false) -> NSRange {
+        @discardableResult fileprivate func startNewPage(_ calculationOnly: Bool = false) -> NSRange {
             if(calculationOnly == false) {
                 UIGraphicsBeginPDFPage()
             }
@@ -402,14 +402,14 @@ open class SimplePDF {
         // MARK: Headers and Footers
         fileprivate func addPageHeaderFooter() {
             /*if(pagesCount == 0) {
-                XCGLogger.warning("pages count not assigned, if it's printed in a header/footer, it would be wrong.")
-            }*/
+             XCGLogger.warning("pages count not assigned, if it's printed in a header/footer, it would be wrong.")
+             }*/
             // draw top line
             drawLine(CGPoint(x: availablePageRect.origin.x, y: availablePageRect.origin.y-10),
-                p2: CGPoint(x: availablePageRect.origin.x + availablePageRect.size.width, y: availablePageRect.origin.y - 10))
+                     p2: CGPoint(x: availablePageRect.origin.x + availablePageRect.size.width, y: availablePageRect.origin.y - 10))
             // draw bottom line
             drawLine(CGPoint(x: availablePageRect.origin.x, y: availablePageRect.origin.y + availablePageRect.size.height + 1),
-                p2: CGPoint(x: availablePageRect.origin.x + availablePageRect.size.width, y: availablePageRect.origin.y + availablePageRect.size.height + 1))
+                     p2: CGPoint(x: availablePageRect.origin.x + availablePageRect.size.width, y: availablePageRect.origin.y + availablePageRect.size.height + 1))
             
             for i in 0 ..< self.headerFooterTexts.count {
                 var text = self.headerFooterTexts[i]
@@ -569,7 +569,7 @@ open class SimplePDF {
             }
             return addAttributedString(attrString, allowSplitting: false, boxStyle: boxStyle, calculationOnly: calculationOnly)
         }
-
+        
         fileprivate func addBodyText(_ string: String, backgroundBoxColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
             let attrString = textFormatter.attributedStringForStyle(string, style: .bodyText)
             var boxStyle = textFormatter.boxStyleForTextStyle(.bodyText)
@@ -595,9 +595,9 @@ open class SimplePDF {
             for i in 0 ..< imageCaptions.count {
                 let mutableCaption = NSMutableAttributedString(attributedString: textFormatter.attributedStringForStyle(imageCaptions[i], style: .h6))
                 /* this doesn't work since captions are drawn using CTLine
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.alignment = .Center
-                mutableCaption.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, mutableCaption.length)) */
+                 let paragraphStyle = NSMutableParagraphStyle()
+                 paragraphStyle.alignment = .Center
+                 mutableCaption.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, mutableCaption.length)) */
                 attributedImageCaptions.append(mutableCaption)
             }
             
@@ -628,162 +628,162 @@ open class SimplePDF {
         }
         
         fileprivate func addImagesRow(_ imagePaths: [String], imageCaptions: [NSAttributedString], columnWidths: [CGFloat],
-            spacing: CGFloat = 2, padding: CGFloat = 5, captionBackgroundColor: UIColor? = nil,
-            imageBackgroundColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
-                assert(imagePaths.count == imageCaptions.count && imageCaptions.count == columnWidths.count,
-                    "image paths, image captions and column widths don't have same number of elements")
-                
-                var funcCallRange = NSMakeRange(0, 0)
-                
-                var imageProperties = Array<NSDictionary>()
-                for i in 0 ..< imagePaths.count {
-                    if(imagePaths[i].isEmpty) {
-                        imageProperties.append(NSDictionary())
-                        continue
-                    }
-                    let thisImageProperties = SimplePDFUtilities.getImageProperties(imagePaths[i])
-                    imageProperties.append(thisImageProperties)
+                                      spacing: CGFloat = 2, padding: CGFloat = 5, captionBackgroundColor: UIColor? = nil,
+                                      imageBackgroundColor: UIColor? = nil, calculationOnly: Bool = false) -> NSRange {
+            assert(imagePaths.count == imageCaptions.count && imageCaptions.count == columnWidths.count,
+                   "image paths, image captions and column widths don't have same number of elements")
+            
+            var funcCallRange = NSMakeRange(0, 0)
+            
+            var imageProperties = Array<NSDictionary>()
+            for i in 0 ..< imagePaths.count {
+                if(imagePaths[i].isEmpty) {
+                    imageProperties.append(NSDictionary())
+                    continue
                 }
+                let thisImageProperties = SimplePDFUtilities.getImageProperties(imagePaths[i])
+                imageProperties.append(thisImageProperties)
+            }
+            
+            var maxLineHeight:CGFloat = 0
+            for i in 0 ..< imageCaptions.count {
+                let thisCaption = imageCaptions[i]
+                if(thisCaption.length == 0) {
+                    continue
+                }
+                let line = CTLineCreateWithAttributedString(thisCaption)
+                let lineBounds = CTLineGetBoundsWithOptions(line, CTLineBoundsOptions.useGlyphPathBounds)
                 
-                var maxLineHeight:CGFloat = 0
-                for i in 0 ..< imageCaptions.count {
-                    let thisCaption = imageCaptions[i]
-                    if(thisCaption.length == 0) {
-                        continue
-                    }
+                if(lineBounds.size.height > maxLineHeight) {
+                    maxLineHeight = lineBounds.size.height
+                }
+            }
+            
+            // start a new page if needed
+            for i in 0 ..< imagePaths.count {
+                let thisWidth = columnWidths[i] - (2 * padding)
+                let availableSpace = CGSize(width: CGFloat.greatestFiniteMagnitude, height: availablePageRect.size.height - currentLocation.y)
+                
+                let thisProperties = imageProperties[i]
+                if thisProperties.allKeys.count == 0 {
+                    continue
+                }
+                let imageWidth = thisProperties[kCGImagePropertyPixelWidth as String] as! CGFloat
+                let imageHeight = thisProperties[kCGImagePropertyPixelHeight as String] as! CGFloat
+                
+                let imageSize = CGSize(width: imageWidth, height:imageHeight)
+                
+                let fitHeight = self.aspectFitHeightForWidth(imageSize, width: thisWidth)
+                if(fitHeight + maxLineHeight > availableSpace.height) {
+                    funcCallRange.location = 1
+                    startNewPage(calculationOnly)
+                    break
+                }
+            }
+            
+            currentLocation.y += padding
+            var maxHeightRendered: CGFloat = 0
+            var loc = currentLocation
+            for i in 0 ..< imagePaths.count {
+                // render the label
+                var currentY = loc.y
+                let thisCaption = imageCaptions[i]
+                let thisWidth = columnWidths[i]
+                var availableSpace = CGSize(width: thisWidth - (2 * padding), height: availablePageRect.size.height - loc.y)
+                
+                if(thisCaption.length != 0) {
                     let line = CTLineCreateWithAttributedString(thisCaption)
-                    let lineBounds = CTLineGetBoundsWithOptions(line, CTLineBoundsOptions.useGlyphPathBounds)
+                    let truncationToken = CTLineCreateWithAttributedString(NSAttributedString(string:"…"))
+                    let truncatedLine = CTLineCreateTruncatedLine(line, Double(availableSpace.width), CTLineTruncationType.end, truncationToken)
                     
-                    if(lineBounds.size.height > maxLineHeight) {
-                        maxLineHeight = lineBounds.size.height
+                    if(calculationOnly == false) {
+                        if(captionBackgroundColor != nil) {
+                            let originalTextRect = CGRect(x: availablePageRect.origin.x + loc.x + padding, y: availablePageRect.origin.y + currentY,
+                                                          width: thisWidth - (2 * padding), height: maxLineHeight + spacing)
+                            drawRect(originalTextRect, fillColor: captionBackgroundColor)
+                        }
+                        
+                    }
+                    let originalPoint = CGPoint(x: availablePageRect.origin.x + loc.x + padding, y: availablePageRect.origin.y + currentY)
+                    var textPoint = convertPointToCoreTextCoordinates(originalPoint)
+                    
+                    // since we need to provide the base line coordinates to CoreText, we should subtract the maxLineHeight
+                    textPoint.y -= maxLineHeight
+                    
+                    if(calculationOnly == false) {
+                        // flip context
+                        guard let context = UIGraphicsGetCurrentContext() else {
+                            continue
+                        }
+                        
+                        let bounds = UIGraphicsGetPDFContextBounds()
+                        context.textMatrix = CGAffineTransform.identity
+                        context.translateBy(x: bounds.origin.x, y: bounds.size.height)
+                        context.scaleBy(x: 1.0, y: -1.0)
+                        context.textPosition = textPoint
+                        
+                        //CGContextSetTextPosition(context, textPoint.x, textPoint.y)
+                        CTLineDraw(truncatedLine!, context)
+                        
+                        // flip it back
+                        context.scaleBy(x: 1.0, y: -1.0)
+                        context.translateBy(x: -bounds.origin.x, y: -bounds.size.height)
                     }
                 }
                 
-                // start a new page if needed
-                for i in 0 ..< imagePaths.count {
-                    let thisWidth = columnWidths[i] - (2 * padding)
-                    let availableSpace = CGSize(width: CGFloat.greatestFiniteMagnitude, height: availablePageRect.size.height - currentLocation.y)
-                    
-                    let thisProperties = imageProperties[i]
-                    if thisProperties.allKeys.count == 0 {
-                        continue
-                    }
-                    let imageWidth = thisProperties[kCGImagePropertyPixelWidth as String] as! CGFloat
-                    let imageHeight = thisProperties[kCGImagePropertyPixelHeight as String] as! CGFloat
-                    
-                    let imageSize = CGSize(width: imageWidth, height:imageHeight)
-                    
-                    let fitHeight = self.aspectFitHeightForWidth(imageSize, width: thisWidth)
-                    if(fitHeight + maxLineHeight > availableSpace.height) {
-                        funcCallRange.location = 1
-                        startNewPage(calculationOnly)
-                        break
-                    }
-                }
+                currentY += (maxLineHeight + spacing)
+                availableSpace.height -= (maxLineHeight + spacing)
                 
-                currentLocation.y += padding
-                var maxHeightRendered: CGFloat = 0
-                var loc = currentLocation
-                for i in 0 ..< imagePaths.count {
-                    // render the label
-                    var currentY = loc.y
-                    let thisCaption = imageCaptions[i]
-                    let thisWidth = columnWidths[i]
-                    var availableSpace = CGSize(width: thisWidth - (2 * padding), height: availablePageRect.size.height - loc.y)
-                    
-                    if(thisCaption.length != 0) {
-                        let line = CTLineCreateWithAttributedString(thisCaption)
-                        let truncationToken = CTLineCreateWithAttributedString(NSAttributedString(string:"…"))
-                        let truncatedLine = CTLineCreateTruncatedLine(line, Double(availableSpace.width), CTLineTruncationType.end, truncationToken)
-                        
-                        if(calculationOnly == false) {
-                            if(captionBackgroundColor != nil) {
-                                let originalTextRect = CGRect(x: availablePageRect.origin.x + loc.x + padding, y: availablePageRect.origin.y + currentY,
-                                    width: thisWidth - (2 * padding), height: maxLineHeight + spacing)
-                                drawRect(originalTextRect, fillColor: captionBackgroundColor)
-                            }
-                            
-                        }
-                        let originalPoint = CGPoint(x: availablePageRect.origin.x + loc.x + padding, y: availablePageRect.origin.y + currentY)
-                        var textPoint = convertPointToCoreTextCoordinates(originalPoint)
-                        
-                        // since we need to provide the base line coordinates to CoreText, we should subtract the maxLineHeight
-                        textPoint.y -= maxLineHeight
-                        
-                        if(calculationOnly == false) {
-                            // flip context
-                            guard let context = UIGraphicsGetCurrentContext() else {
-                                continue
-                            }
-                            
-                            let bounds = UIGraphicsGetPDFContextBounds()
-                            context.textMatrix = CGAffineTransform.identity
-                            context.translateBy(x: bounds.origin.x, y: bounds.size.height)
-                            context.scaleBy(x: 1.0, y: -1.0)
-                            context.textPosition = textPoint
-                            
-                            //CGContextSetTextPosition(context, textPoint.x, textPoint.y)
-                            CTLineDraw(truncatedLine!, context)
-                            
-                            // flip it back
-                            context.scaleBy(x: 1.0, y: -1.0)
-                            context.translateBy(x: -bounds.origin.x, y: -bounds.size.height)
-                        }
-                    }
-                    
-                    currentY += (maxLineHeight + spacing)
-                    availableSpace.height -= (maxLineHeight + spacing)
-                    
-                    // render the image
-                    let thisProperties = imageProperties[i]
-                    
-                    if(thisProperties.allKeys.count == 0) {
-                        // advance to next column
-                        loc.x += thisWidth
-                        continue
-                    }
-                    
-                    let imageWidth = thisProperties[kCGImagePropertyPixelWidth as String] as! CGFloat
-                    let imageHeight = thisProperties[kCGImagePropertyPixelHeight as String] as! CGFloat
-                    
-                    let originalImageSize = CGSize(width: imageWidth, height:imageHeight)
-                    
-                    let fitHeight = self.aspectFitHeightForWidth(originalImageSize, width: availableSpace.width)
-                    var imageSizeToRender = CGSize(width: availableSpace.width, height: fitHeight)
-                    if(fitHeight > availableSpace.height) {
-                        let fitWidth = self.aspectFitWidthForHeight(originalImageSize, height: availableSpace.height)
-                        imageSizeToRender = CGSize(width: fitWidth, height: availableSpace.height)
-                    }
-                    
-                    if(calculationOnly == false) {
-                        if(imageBackgroundColor != nil) {
-                            let bgRect = CGRect(x: availablePageRect.origin.x + loc.x + padding, y: availablePageRect.origin.y + currentY,
-                                width: availableSpace.width, height: availableSpace.height)
-                            drawRect(bgRect, fillColor: imageBackgroundColor)
-                        }
-                    }
-                    
-                    let imageX = availablePageRect.origin.x + loc.x + padding + ((availableSpace.width - imageSizeToRender.width) / 2)
-                    let imageY = availablePageRect.origin.y + currentY
-                    let imageRect = CGRect(x: imageX, y: imageY, width: imageSizeToRender.width, height: imageSizeToRender.height)
-                    
-                    if(calculationOnly == false) {
-                        let image = UIImage(contentsOfFile: imagePaths[i])
-                        image?.draw(in: imageRect)
-                    }
-                    
+                // render the image
+                let thisProperties = imageProperties[i]
+                
+                if(thisProperties.allKeys.count == 0) {
                     // advance to next column
                     loc.x += thisWidth
-                    
-                    let totalHeight = (maxLineHeight + imageSizeToRender.height + spacing)
-                    
-                    if(totalHeight  > maxHeightRendered) {
-                        maxHeightRendered = totalHeight
+                    continue
+                }
+                
+                let imageWidth = thisProperties[kCGImagePropertyPixelWidth as String] as! CGFloat
+                let imageHeight = thisProperties[kCGImagePropertyPixelHeight as String] as! CGFloat
+                
+                let originalImageSize = CGSize(width: imageWidth, height:imageHeight)
+                
+                let fitHeight = self.aspectFitHeightForWidth(originalImageSize, width: availableSpace.width)
+                var imageSizeToRender = CGSize(width: availableSpace.width, height: fitHeight)
+                if(fitHeight > availableSpace.height) {
+                    let fitWidth = self.aspectFitWidthForHeight(originalImageSize, height: availableSpace.height)
+                    imageSizeToRender = CGSize(width: fitWidth, height: availableSpace.height)
+                }
+                
+                if(calculationOnly == false) {
+                    if(imageBackgroundColor != nil) {
+                        let bgRect = CGRect(x: availablePageRect.origin.x + loc.x + padding, y: availablePageRect.origin.y + currentY,
+                                            width: availableSpace.width, height: availableSpace.height)
+                        drawRect(bgRect, fillColor: imageBackgroundColor)
                     }
                 }
-                currentLocation.y += maxHeightRendered
-                currentLocation.y += defaultSpacing
-                return funcCallRange
+                
+                let imageX = availablePageRect.origin.x + loc.x + padding + ((availableSpace.width - imageSizeToRender.width) / 2)
+                let imageY = availablePageRect.origin.y + currentY
+                let imageRect = CGRect(x: imageX, y: imageY, width: imageSizeToRender.width, height: imageSizeToRender.height)
+                
+                if(calculationOnly == false) {
+                    let image = UIImage(contentsOfFile: imagePaths[i])
+                    image?.draw(in: imageRect)
+                }
+                
+                // advance to next column
+                loc.x += thisWidth
+                
+                let totalHeight = (maxLineHeight + imageSizeToRender.height + spacing)
+                
+                if(totalHeight  > maxHeightRendered) {
+                    maxHeightRendered = totalHeight
+                }
+            }
+            currentLocation.y += maxHeightRendered
+            currentLocation.y += defaultSpacing
+            return funcCallRange
         }
         
         fileprivate func addAttributedStringsToColumns(_ columnWidths: [CGFloat], strings: [NSAttributedString], horizontalPadding: CGFloat = 5, allowSplitting: Bool = true, boxStyle: BoxStyle? = nil, calculationOnly: Bool = false, withVerticalDividerLine: Bool = false) -> NSRange {
@@ -867,7 +867,7 @@ open class SimplePDF {
                     
                     // draw string
                     var originalTextRect = CGRect(x: availablePageRect.origin.x + loc.x, y: availablePageRect.origin.y + loc.y,
-                        width: thisWidth, height: availableSpace.height)
+                                                  width: thisWidth, height: availableSpace.height)
                     if(calculationOnly == false) {
                         let boxRect = CGRect(x: originalTextRect.origin.x, y: originalTextRect.origin.y, width: availableSpace.width, height: suggestedSize.height)
                         
@@ -889,7 +889,7 @@ open class SimplePDF {
                                 drawLine(boxRect.bottomLeftCorner(), p2: boxRect.bottomRightCorner(), color: border.color, strokeWidth: border.width)
                             }
                         }
-
+                        
                         if withVerticalDividerLine && i < columnWidths.count - 1 {
                             let x = originalTextRect.origin.x + availableSpace.width + horizontalPadding
                             drawLine(CGPoint(x: x, y: originalTextRect.origin.y), p2: CGPoint(x: x, y: originalTextRect.origin.y + suggestedSize.height))
@@ -970,7 +970,7 @@ open class SimplePDF {
         fileprivate func addAttributedString(_ attrString: NSAttributedString, allowSplitting:Bool = true, boxStyle: BoxStyle? = nil, calculationOnly: Bool = false) -> NSRange {
             return addAttributedStringsToColumns([availablePageRect.size.width], strings: [attrString], horizontalPadding: 0.0, allowSplitting: allowSplitting, boxStyle: boxStyle, calculationOnly: calculationOnly)
         }
-
+        
         fileprivate func addView(_ view: UIView, calculationOnly: Bool = false) -> NSRange {
             // Here's how I work with NSRange in these functions
             // location is startPageOffset
@@ -1029,7 +1029,7 @@ open class SimplePDF {
                 let pageNumberAttrString = NSMutableAttributedString(string: "\(tocAdjustedPageNumber + 1)")
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = .right
-                pageNumberAttrString.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, pageNumberAttrString.length))
+                pageNumberAttrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, pageNumberAttrString.length))
                 
                 let col2Width:CGFloat = 50
                 let col1Width = availablePageSize.width - col2Width
@@ -1201,11 +1201,11 @@ open class SimplePDF {
     
     open var headerFooterTexts = Array<HeaderFooterText>()
     open var headerFooterImages = Array<HeaderFooterImage>()
-
+    
     open var availablePageSize: CGSize {
         get { return pdfWriter.availablePageSize }
     }
-
+    
     open var pageIndexToShowTOC: Int {
         get { return document.tableOfContentsOnPage }
         set { document.tableOfContentsOnPage = newValue }
@@ -1220,10 +1220,10 @@ open class SimplePDF {
         set { document.smallestHeadingToIncludeInTOC = newValue }
     }
     
-    open let pdfFilePath: String
-    open let pdfFileName: String
-    open let authorName: String
-    open let pdfTitle: String
+    public let pdfFilePath: String
+    public let pdfFileName: String
+    public let authorName: String
+    public let pdfTitle: String
     
     fileprivate var document = DocumentStructure()
     fileprivate var pdfWriter: PDFWriter
@@ -1233,41 +1233,41 @@ open class SimplePDF {
     }
     
     /*
-    private var pagesCount: Int {
-        get { return self.document.pagesCount
-        }
-    }*/
-
+     private var pagesCount: Int {
+     get { return self.document.pagesCount
+     }
+     }*/
+    
     // MARK: - SimplePDF methods
     public init(pdfTitle: String, authorName: String, fileName : String = "SimplePDF.pdf", replaceFileIfExisting: Bool = false, pageSize: PageSize = .a4, pageOrientation: PageOrientation = .portrait,
-        leftMargin:CGFloat = 36, rightMargin:CGFloat = 36, topMargin: CGFloat = 72, bottomMargin: CGFloat = 36, textFormatter: DefaultTextFormatter = DefaultTextFormatter()) {
-            
-            self.leftMargin = leftMargin
-            self.rightMargin = rightMargin
-            self.topMargin = topMargin
-            self.bottomMargin = bottomMargin
-            self.pageSize = pageSize
-            self.pageOrientation = pageOrientation
-            self.textFormatter = textFormatter
-            
-            self.authorName = authorName
-            self.pdfTitle = pdfTitle
+                leftMargin:CGFloat = 36, rightMargin:CGFloat = 36, topMargin: CGFloat = 72, bottomMargin: CGFloat = 36, textFormatter: DefaultTextFormatter = DefaultTextFormatter()) {
         
-            self.pdfFileName = fileName
-            let tmpFilePath = SimplePDFUtilities.pathForTmpFile(pdfFileName)
-            self.pdfFilePath = replaceFileIfExisting ? tmpFilePath : SimplePDFUtilities.renameFilePathToPreventNameCollissions(tmpFilePath as NSString)
+        self.leftMargin = leftMargin
+        self.rightMargin = rightMargin
+        self.topMargin = topMargin
+        self.bottomMargin = bottomMargin
+        self.pageSize = pageSize
+        self.pageOrientation = pageOrientation
+        self.textFormatter = textFormatter
         
-            self.pdfWriter = PDFWriter(textFormatter: textFormatter, pageSize: pageSize, pageOrientation: pageOrientation,
-                leftMargin: leftMargin, rightMargin: rightMargin, topMargin: topMargin, bottomMargin: bottomMargin,
-                pagesCount: 0,
-                headerFooterTexts: headerFooterTexts, headerFooterImages: headerFooterImages)
+        self.authorName = authorName
+        self.pdfTitle = pdfTitle
+        
+        self.pdfFileName = fileName
+        let tmpFilePath = SimplePDFUtilities.pathForTmpFile(pdfFileName)
+        self.pdfFilePath = replaceFileIfExisting ? tmpFilePath : SimplePDFUtilities.renameFilePathToPreventNameCollissions(tmpFilePath as NSString)
+        
+        self.pdfWriter = PDFWriter(textFormatter: textFormatter, pageSize: pageSize, pageOrientation: pageOrientation,
+                                   leftMargin: leftMargin, rightMargin: rightMargin, topMargin: topMargin, bottomMargin: bottomMargin,
+                                   pagesCount: 0,
+                                   headerFooterTexts: headerFooterTexts, headerFooterImages: headerFooterImages)
     }
     
     fileprivate func initializePDFWriter(_ pagesCount: Int) -> PDFWriter {
         return PDFWriter(textFormatter: textFormatter, pageSize: pageSize, pageOrientation: pageOrientation,
-            leftMargin: leftMargin, rightMargin: rightMargin, topMargin: topMargin, bottomMargin: bottomMargin,
-            pagesCount: pagesCount,
-            headerFooterTexts: headerFooterTexts, headerFooterImages: headerFooterImages)
+                         leftMargin: leftMargin, rightMargin: rightMargin, topMargin: topMargin, bottomMargin: bottomMargin,
+                         pagesCount: pagesCount,
+                         headerFooterTexts: headerFooterTexts, headerFooterImages: headerFooterImages)
     }
     
     open func writePDFWithoutTableOfContents() -> String {
@@ -1298,7 +1298,7 @@ open class SimplePDF {
         pdfWriter.closePDF()
         return pdfFilePath
     }
-
+    
     
     open func writePDFWithTableOfContents() -> String {
         /////////// CACULATIONS PASS ///////////
@@ -1439,12 +1439,12 @@ open class SimplePDF {
     }
     
     open func addImagesRow(_ imagePaths: [String], imageCaptions: [NSAttributedString], columnWidths: [CGFloat],
-        spacing: CGFloat = 2, padding: CGFloat = 5, captionBackgroundColor: UIColor? = nil, imageBackgroundColor: UIColor? = nil) -> NSRange {
-            let range = pdfWriter.addImagesRow(imagePaths, imageCaptions: imageCaptions, columnWidths: columnWidths, spacing: spacing, padding: padding, captionBackgroundColor: captionBackgroundColor, imageBackgroundColor: imageBackgroundColor, calculationOnly: true)
-            let funcCall = DocumentStructure.FunctionCall.addImagesRow(imagePaths: imagePaths, imageCaptions: imageCaptions, columnWidths: columnWidths, spacing: spacing, padding: padding, captionBackgroundColor: captionBackgroundColor, imageBackgroundColor: imageBackgroundColor)
-            let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
-            self.document.documentElements.append(docNode)
-            return range
+                           spacing: CGFloat = 2, padding: CGFloat = 5, captionBackgroundColor: UIColor? = nil, imageBackgroundColor: UIColor? = nil) -> NSRange {
+        let range = pdfWriter.addImagesRow(imagePaths, imageCaptions: imageCaptions, columnWidths: columnWidths, spacing: spacing, padding: padding, captionBackgroundColor: captionBackgroundColor, imageBackgroundColor: imageBackgroundColor, calculationOnly: true)
+        let funcCall = DocumentStructure.FunctionCall.addImagesRow(imagePaths: imagePaths, imageCaptions: imageCaptions, columnWidths: columnWidths, spacing: spacing, padding: padding, captionBackgroundColor: captionBackgroundColor, imageBackgroundColor: imageBackgroundColor)
+        let docNode = DocumentStructure.DocumentElement(functionCall: funcCall, pageRange: range)
+        self.document.documentElements.append(docNode)
+        return range
     }
     
     open func addAttributedStringsToColumns(_ columnWidths: [CGFloat], strings: [NSAttributedString], horizontalPadding: CGFloat = 5, allowSplitting: Bool = true, backgroundColor: UIColor? = nil, withVerticalDividerLine : Bool = false) -> NSRange  {
@@ -1532,13 +1532,13 @@ open class SimplePDF {
 extension SimplePDF {
     @available(*, deprecated, message: "use `SimplePDF.pageNumberPlaceholder` instead")
     public var kPageNumberPlaceholder : String { get { return SimplePDF.pageNumberPlaceholder }}
-
+    
     @available(*, deprecated, message: "use `SimplePDF.pagesCountPlaceholder` instead")
     public var kPagesCountPlaceholder : String { get { return SimplePDF.pagesCountPlaceholder }}
-
+    
     @available(*, deprecated, message: "use `SimplePDF.defaultSpacing` instead")
     public var kStandardSpacing : CGFloat { get { return SimplePDF.defaultSpacing }}
-
+    
     @available(*, deprecated, message: "use `SimplePDF.defaultBackgroundBoxColor` instead")
     public var kDefaultBackgroundBoxColor : UIColor { get { return SimplePDF.defaultBackgroundBoxColor }}
 }
