@@ -10,6 +10,8 @@ import UIKit
 import SimplePDFSwift
 
 class ViewController: UIViewController, UIDocumentInteractionControllerDelegate {
+    
+    @IBOutlet private var activityIndicatorView: UIActivityIndicatorView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +24,7 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
     }
     
     @IBAction func generateAndOpenPDF(_ sender: AnyObject) {
+        self.activityIndicatorView.startAnimating()
         DispatchQueue.global().async {
             self.generateAndOpenPDFHandler()
         }
@@ -45,6 +48,7 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         
         // open the generated PDF
         DispatchQueue.main.async(execute: { () -> Void in
+            self.activityIndicatorView.stopAnimating()
             let pdfURL = URL(fileURLWithPath: tmpPDFPath)
             let interactionController = UIDocumentInteractionController(url: pdfURL)
             interactionController.delegate = self
@@ -81,8 +85,8 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         let paragraphAlignment = NSMutableParagraphStyle()
         paragraphAlignment.alignment = .center
         let titleRange = NSMakeRange(0, documentTitle.length)
-        documentTitle.addAttribute(NSFontAttributeName, value: titleFont, range: titleRange)
-        documentTitle.addAttribute(NSParagraphStyleAttributeName, value: paragraphAlignment, range: titleRange)
+        documentTitle.addAttribute(NSAttributedString.Key.font, value: titleFont, range: titleRange)
+        documentTitle.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphAlignment, range: titleRange)
         pdf.addAttributedString(documentTitle)
         
         // we don't want anymore text on this page, so we force a page break
@@ -129,10 +133,10 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         // add some document information to the header, on left
         let leftHeaderString = "Author: Muhammad Ishaq\nDate/Time: \(dateString)"
         let leftHeaderAttrString = NSMutableAttributedString(string: leftHeaderString)
-        leftHeaderAttrString.addAttribute(NSParagraphStyleAttributeName, value: leftAlignment, range: NSMakeRange(0, leftHeaderAttrString.length))
-        leftHeaderAttrString.addAttribute(NSFontAttributeName, value: regularFont, range: NSMakeRange(0, leftHeaderAttrString.length))
-        leftHeaderAttrString.addAttribute(NSFontAttributeName, value: boldFont, range: leftHeaderAttrString.mutableString.range(of: "Author:"))
-        leftHeaderAttrString.addAttribute(NSFontAttributeName, value: boldFont, range: leftHeaderAttrString.mutableString.range(of: "Date/Time:"))
+        leftHeaderAttrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: leftAlignment, range: NSMakeRange(0, leftHeaderAttrString.length))
+        leftHeaderAttrString.addAttribute(NSAttributedString.Key.font, value: regularFont, range: NSMakeRange(0, leftHeaderAttrString.length))
+        leftHeaderAttrString.addAttribute(NSAttributedString.Key.font, value: boldFont, range: leftHeaderAttrString.mutableString.range(of: "Author:"))
+        leftHeaderAttrString.addAttribute(NSAttributedString.Key.font, value: boldFont, range: leftHeaderAttrString.mutableString.range(of: "Date/Time:"))
         let header = SimplePDF.HeaderFooterText(type: .header, pageRange: NSMakeRange(1, Int.max), attributedString: leftHeaderAttrString)
         pdf.headerFooterTexts.append(header)
         
@@ -147,13 +151,13 @@ class ViewController: UIViewController, UIDocumentInteractionControllerDelegate 
         let centerAlignment = NSMutableParagraphStyle()
         centerAlignment.alignment = .center
         let footerString = NSMutableAttributedString(string: "\(SimplePDF.pageNumberPlaceholder) of \(SimplePDF.pagesCountPlaceholder)")
-        footerString.addAttribute(NSParagraphStyleAttributeName, value: centerAlignment, range: NSMakeRange(0, footerString.length))
+        footerString.addAttribute(NSAttributedString.Key.paragraphStyle, value: centerAlignment, range: NSMakeRange(0, footerString.length))
         let footer = SimplePDF.HeaderFooterText(type: .footer, pageRange: NSMakeRange(1, Int.max), attributedString: footerString)
         pdf.headerFooterTexts.append(footer)
         
         // add a link to your app may be
         let link = NSMutableAttributedString(string: "http://ishaq.pk/")
-        link.addAttribute(NSParagraphStyleAttributeName, value: leftAlignment, range: NSMakeRange(0, link.length))
+        link.addAttribute(NSAttributedString.Key.paragraphStyle, value: leftAlignment, range: NSMakeRange(0, link.length))
         let appLinkFooter = SimplePDF.HeaderFooterText(type: .footer, pageRange: NSMakeRange(1, Int.max), attributedString: link)
         pdf.headerFooterTexts.append(appLinkFooter)
         

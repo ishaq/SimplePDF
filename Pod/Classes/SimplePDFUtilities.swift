@@ -64,7 +64,7 @@ class SimplePDFUtilities {
         guard let imageSourceRef = CGImageSourceCreateWithURL(imageURL as CFURL, nil) else {
             return NSDictionary()
         }
-
+        
         let propertiesAsCFDictionary = CGImageSourceCopyPropertiesAtIndex(imageSourceRef, 0, nil)
         // translating it to an optional NSDictionary (instead of as? operator) because:
         // http://stackoverflow.com/questions/32716146/cfdictionary-wont-bridge-to-nsdictionary-swift-2-0-ios9
@@ -86,19 +86,19 @@ class SimplePDFUtilities {
             mutableValue = mutableValue / base
             let unicodeChar = UnicodeScalar(remainder + Int(unicodeLetterA.value))
             result = String(describing: unicodeChar) + result
-        
+            
         } while mutableValue > 0
         
         return result
     }
     
     class func generateThumbnail(_ imageURL: URL, size: CGSize, callback: @escaping (_ thumbnail: UIImage, _ fromURL: URL, _ size: CGSize) -> Void) {
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: { () -> Void in
+        DispatchQueue.global(qos: .userInitiated).async(execute: { () -> Void in
             if let imageSource = CGImageSourceCreateWithURL(imageURL as CFURL, nil) {
                 let options = [
                     kCGImageSourceThumbnailMaxPixelSize as String: max(size.width, size.height),
                     kCGImageSourceCreateThumbnailFromImageIfAbsent as String: true
-                ] as [String : Any]
+                    ] as [String : Any]
                 
                 if let cgImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary?) {
                     let thumbnail = UIImage(cgImage: cgImage)
